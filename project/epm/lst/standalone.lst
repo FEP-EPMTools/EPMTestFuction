@@ -1,0 +1,86 @@
+L 1 "..\..\common\src\BSP\Driver\Source\standalone.c"
+N/*
+N * standalone.c - minimal bootstrap for C library
+N * Copyright (C) 2000 ARM Limited.
+N * All rights reserved.
+N */
+N
+N/*
+N * RCS $Revision: 2 $
+N * Checkin $Date: 15/05/18 2:47p $ 0
+N * Revising $Author: Hpchen0 $
+N */
+N
+N/*
+N * This code defines a run-time environment for the C library.
+N * Without this, the C startup code will attempt to use semi-hosting
+N * calls to get environment information.
+N */
+N
+Nextern unsigned int Image$$RW_RAM1$$ZI$$Limit;
+N
+N
+Nvoid _sys_exit(int return_code)
+N{
+Nlabel:
+N    goto label; /* endless loop */
+N}
+N
+Nvoid _ttywrch(int ch)
+N{
+N    char tempch = (char)ch;
+N    (void)tempch;
+N}
+N
+N#if(0)
+S#define STACK_SIZE      0x1000000
+S#define USER_SRAM_SIZE  0x1000000
+S
+Sstruct __initial_stackheap {  
+S    unsigned heap_base;                /* low-address end of initial heap */  
+S    unsigned stack_base;               /* high-address end of initial stack */  
+S    unsigned heap_limit;               /* high-address end of initial heap */  
+S    unsigned stack_limit;              /* low-address end of initial stack */  
+S};  
+S  
+S//*----------------------------------------------------------------------------  
+S//* Function Name       : __user_initial_stackheap  
+S//* Object              : Returns the locations of the initial stack and heap.  
+S//* Input Parameters    :  
+S//* Output Parameters   :The values returned in r0 to r3 depend on whether you  
+S//*                     are using the one or two region model:  
+S//*         One region (r0,r1) is the single stack and heap region. r1 is  
+S//*         greater than r0. r2 and r3 are ignored.  
+S//*         Two regions (r0, r2) is the initial heap and (r3, r1) is the initial  
+S//*         stack. r2 is greater than or equal to r0. r3 is less than r1.  
+S//* Functions called    : none  
+S//*----------------------------------------------------------------------------  
+S__value_in_regs struct __initial_stackheap __user_initial_stackheap(  
+S        unsigned R0, unsigned SP, unsigned R2, unsigned SL)  
+S{  
+S    struct __initial_stackheap config;  
+S  
+S    config.stack_base = 0x4000000;//SP;  
+S    config.stack_limit = 0x4000000-STACK_SIZE;  
+S    config.heap_base  = (unsigned)(0x1000000);  
+S    config.heap_limit = ((unsigned)(0x1000000))-USER_SRAM_SIZE;  
+S  
+S    return config;   
+S}  
+N#else
+N/// @cond HIDDEN_SYMBOLS
+N
+N__value_in_regs struct R0_R3 {
+N    unsigned heap_base, stack_base, heap_limit, stack_limit;
+N}
+N__user_setup_stackheap(unsigned int R0, unsigned int SP, unsigned int R2, unsigned int SL)
+N{
+N    struct R0_R3 config;
+N    config.heap_base = (unsigned int)&Image$$RW_RAM1$$ZI$$Limit;     
+N    config.stack_base = SP;
+N    return config;
+N}
+N/// @endcond HIDDEN_SYMBOLS
+N
+N#endif
+N/* end of file standalone.c */

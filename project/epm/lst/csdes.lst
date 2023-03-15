@@ -1,0 +1,661 @@
+L 1 "src\syshal\octopus\csdes.c"
+N/*****************************************************************************/
+N/* File Name   : csdes.c		                                                 */
+N/* Author      : Copyright OCL                                        			 */
+N/* Company     : Octopus Cards Ltd.                                          */
+N/* Purpose     : encrypt/decrypt utility																		 */
+N/* Last Update : 17 Jul 2015                                                 */
+N/*****************************************************************************/
+N
+N/*============================================================================*/
+N/* Encryption/Decryption Routines                                             */
+N/*============================================================================*/
+N
+N#include "csdes.h"
+L 1 "src\syshal\octopus\csdes.h" 1
+N/*****************************************************************************/
+N/* File Name   : csdes.h		                                                 */
+N/* Author      : Copyright OCL                                        			 */
+N/* Company     : Octopus Cards Ltd.                                          */
+N/* Purpose     : Header for DES encryption routines													 */
+N/* Last Update : 17 Jul 2015                                                 */
+N/*****************************************************************************/
+N#ifndef __CSDES_H__
+N#define __CSDES_H__
+N
+N#include "rwltype.h"
+L 1 "src\syshal\octopus\rwltype.h" 1
+N/*****************************************************************************/
+N/* File Name   : rwltype.h                                                   */
+N/* Author      : Copyright OCL                                        			 */
+N/* Company     : Octopus Cards Ltd.                                          */
+N/* Purpose     : Definition of types used										 								 */
+N/* Last Update : 17 Jul 2015                                                 */
+N/*****************************************************************************/
+N#ifndef RWL_TYPE_H
+N#define RWL_TYPE_H
+N
+Ntypedef unsigned long		ULONG;
+Ntypedef unsigned int		UINT;
+Ntypedef unsigned short	USHORT;
+Ntypedef unsigned char		BYTE;
+Ntypedef int							INT;
+Ntypedef char						CHAR;
+N#endif // RWL_TYPE_H
+N
+N
+L 12 "src\syshal\octopus\csdes.h" 2
+N
+N#define DES3CODE	30
+N#define DES_DECRYPT 0
+N#define DES_ENCRYPT 1
+N#define DES3_DECRYPT (DES3CODE+DES_DECRYPT)
+N#define DES3_ENCRYPT (DES3CODE+DES_ENCRYPT)
+N
+N/*----------------------------------------------------------------------*
+N * Encrypt/Decrypt using DES for a block of 8 bytes
+N *----------------------------------------------------------------------*/
+Nvoid CscryptEncrypt(BYTE *key,			/* 8-byte key */
+N                    BYTE *in,			/* block to be encrypted */
+N                    BYTE *out,			/* encrypted data */
+N                    INT encrypt);		/* 1=encrypt, 0=decrypt */
+N
+N/*----------------------------------------------------------------------*
+N * Encrypt/Decrypt using DES for a block of data
+N * - make sure data block has space for multiple of 8-byte
+N *----------------------------------------------------------------------*/
+Nvoid CscryptEncryptBlock(BYTE *key,		/* the key */
+N						 BYTE *blk,		/* the data block */
+N						 INT length,	/* data length */
+N						 INT encrypt);	/* encrypt or decrypt */
+N#endif // __CSDES_H__
+N
+L 14 "src\syshal\octopus\csdes.c" 2
+N
+N#define ITERATIONS  16
+Ntypedef BYTE des_cblock[8];
+N
+Ntypedef struct des_ks_struct
+N{
+N    union
+N    {
+N        des_cblock _;
+N        ULONG pad[2];
+N    } ks;
+N#undef  _
+N#define _   ks._
+N} des_key_schedule[16];
+N
+N
+N#define c2l(c,l)        (l =((ULONG)(*((c)++)))    , \
+N			 l|=((ULONG)(*((c)++)))<< 8L, \
+N			 l|=((ULONG)(*((c)++)))<<16L, \
+N			 l|=((ULONG)(*((c)++)))<<24L)
+X#define c2l(c,l)        (l =((ULONG)(*((c)++)))    , 			 l|=((ULONG)(*((c)++)))<< 8L, 			 l|=((ULONG)(*((c)++)))<<16L, 			 l|=((ULONG)(*((c)++)))<<24L)
+N
+N#define l2c(l,c)	(*((c)++)=(BYTE)(((l)     )&0xff), \
+N			 *((c)++)=(BYTE)(((l)>> 8L)&0xff), \
+N			 *((c)++)=(BYTE)(((l)>>16L)&0xff), \
+N			 *((c)++)=(BYTE)(((l)>>24L)&0xff))
+X#define l2c(l,c)	(*((c)++)=(BYTE)(((l)     )&0xff), 			 *((c)++)=(BYTE)(((l)>> 8L)&0xff), 			 *((c)++)=(BYTE)(((l)>>16L)&0xff), 			 *((c)++)=(BYTE)(((l)>>24L)&0xff))
+N
+N#define PERM_OP(a,b,t,n,m) ((t)=((((a)>>(n))^(b))&(m)),\
+N      (b)^=(t),\
+N      (a)=((a)^((t)<<(n))))
+X#define PERM_OP(a,b,t,n,m) ((t)=((((a)>>(n))^(b))&(m)),      (b)^=(t),      (a)=((a)^((t)<<(n))))
+N
+N#define HPERM_OP(a,t,n,m) ((t)=((((a)<<(16-(n)))^(a))&(m)),\
+N    (a)=(a)^(t)^(t>>(16-(n))))
+X#define HPERM_OP(a,t,n,m) ((t)=((((a)<<(16-(n)))^(a))&(m)),    (a)=(a)^(t)^(t>>(16-(n))))
+N
+Nstatic INT shifts2[16]={0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0};
+N
+N#define IP(l,r) \
+N    { \
+N    register ULONG tt; \
+N    PERM_OP(r,l,tt, 4,0x0f0f0f0fL); \
+N    PERM_OP(l,r,tt,16,0x0000ffffL); \
+N    PERM_OP(r,l,tt, 2,0x33333333L); \
+N    PERM_OP(l,r,tt, 8,0x00ff00ffL); \
+N    PERM_OP(r,l,tt, 1,0x55555555L); \
+N    }
+X#define IP(l,r)     {     register ULONG tt;     PERM_OP(r,l,tt, 4,0x0f0f0f0fL);     PERM_OP(l,r,tt,16,0x0000ffffL);     PERM_OP(r,l,tt, 2,0x33333333L);     PERM_OP(l,r,tt, 8,0x00ff00ffL);     PERM_OP(r,l,tt, 1,0x55555555L);     }
+N
+N#define FP(l,r) \
+N    { \
+N    register ULONG tt; \
+N    PERM_OP(l,r,tt, 1,0x55555555L); \
+N    PERM_OP(r,l,tt, 8,0x00ff00ffL); \
+N    PERM_OP(l,r,tt, 2,0x33333333L); \
+N    PERM_OP(r,l,tt,16,0x0000ffffL); \
+N    PERM_OP(l,r,tt, 4,0x0f0f0f0fL); \
+N        }
+X#define FP(l,r)     {     register ULONG tt;     PERM_OP(l,r,tt, 1,0x55555555L);     PERM_OP(r,l,tt, 8,0x00ff00ffL);     PERM_OP(l,r,tt, 2,0x33333333L);     PERM_OP(r,l,tt,16,0x0000ffffL);     PERM_OP(l,r,tt, 4,0x0f0f0f0fL);         }
+N
+Nstatic const ULONG des_SPtrans[8][64]={
+N{
+N        /* nibble 0 */
+N        0x00820200L, 0x00020000L, 0x80800000L, 0x80820200L,
+N        0x00800000L, 0x80020200L, 0x80020000L, 0x80800000L,
+N        0x80020200L, 0x00820200L, 0x00820000L, 0x80000200L,
+N        0x80800200L, 0x00800000L, 0x00000000L, 0x80020000L,
+N        0x00020000L, 0x80000000L, 0x00800200L, 0x00020200L,
+N        0x80820200L, 0x00820000L, 0x80000200L, 0x00800200L,
+N        0x80000000L, 0x00000200L, 0x00020200L, 0x80820000L,
+N        0x00000200L, 0x80800200L, 0x80820000L, 0x00000000L,
+N        0x00000000L, 0x80820200L, 0x00800200L, 0x80020000L,
+N        0x00820200L, 0x00020000L, 0x80000200L, 0x00800200L,
+N        0x80820000L, 0x00000200L, 0x00020200L, 0x80800000L,
+N        0x80020200L, 0x80000000L, 0x80800000L, 0x00820000L,
+N        0x80820200L, 0x00020200L, 0x00820000L, 0x80800200L,
+N        0x00800000L, 0x80000200L, 0x80020000L, 0x00000000L,
+N        0x00020000L, 0x00800000L, 0x80800200L, 0x00820200L,
+N        0x80000000L, 0x80820000L, 0x00000200L, 0x80020200L,
+N        },{
+N            /* nibble 1 */
+N            0x10042004L, 0x00000000L, 0x00042000L, 0x10040000L,
+N            0x10000004L, 0x00002004L, 0x10002000L, 0x00042000L,
+N            0x00002000L, 0x10040004L, 0x00000004L, 0x10002000L,
+N            0x00040004L, 0x10042000L, 0x10040000L, 0x00000004L,
+N            0x00040000L, 0x10002004L, 0x10040004L, 0x00002000L,
+N            0x00042004L, 0x10000000L, 0x00000000L, 0x00040004L,
+N            0x10002004L, 0x00042004L, 0x10042000L, 0x10000004L,
+N            0x10000000L, 0x00040000L, 0x00002004L, 0x10042004L,
+N            0x00040004L, 0x10042000L, 0x10002000L, 0x00042004L,
+N            0x10042004L, 0x00040004L, 0x10000004L, 0x00000000L,
+N            0x10000000L, 0x00002004L, 0x00040000L, 0x10040004L,
+N            0x00002000L, 0x10000000L, 0x00042004L, 0x10002004L,
+N            0x10042000L, 0x00002000L, 0x00000000L, 0x10000004L,
+N            0x00000004L, 0x10042004L, 0x00042000L, 0x10040000L,
+N            0x10040004L, 0x00040000L, 0x00002004L, 0x10002000L,
+N            0x10002004L, 0x00000004L, 0x10040000L, 0x00042000L,
+N            },{
+N                /* nibble 2 */
+N                0x41000000L, 0x01010040L, 0x00000040L, 0x41000040L,
+N                0x40010000L, 0x01000000L, 0x41000040L, 0x00010040L,
+N                0x01000040L, 0x00010000L, 0x01010000L, 0x40000000L,
+N                0x41010040L, 0x40000040L, 0x40000000L, 0x41010000L,
+N                0x00000000L, 0x40010000L, 0x01010040L, 0x00000040L,
+N                0x40000040L, 0x41010040L, 0x00010000L, 0x41000000L,
+N                0x41010000L, 0x01000040L, 0x40010040L, 0x01010000L,
+N                0x00010040L, 0x00000000L, 0x01000000L, 0x40010040L,
+N                0x01010040L, 0x00000040L, 0x40000000L, 0x00010000L,
+N                0x40000040L, 0x40010000L, 0x01010000L, 0x41000040L,
+N                0x00000000L, 0x01010040L, 0x00010040L, 0x41010000L,
+N                0x40010000L, 0x01000000L, 0x41010040L, 0x40000000L,
+N                0x40010040L, 0x41000000L, 0x01000000L, 0x41010040L,
+N                0x00010000L, 0x01000040L, 0x41000040L, 0x00010040L,
+N                0x01000040L, 0x00000000L, 0x41010000L, 0x40000040L,
+N                0x41000000L, 0x40010040L, 0x00000040L, 0x01010000L,
+N                },{
+N                    /* nibble 3 */
+N                    0x00100402L, 0x04000400L, 0x00000002L, 0x04100402L,
+N                    0x00000000L, 0x04100000L, 0x04000402L, 0x00100002L,
+N                    0x04100400L, 0x04000002L, 0x04000000L, 0x00000402L,
+N                    0x04000002L, 0x00100402L, 0x00100000L, 0x04000000L,
+N                    0x04100002L, 0x00100400L, 0x00000400L, 0x00000002L,
+N                    0x00100400L, 0x04000402L, 0x04100000L, 0x00000400L,
+N                    0x00000402L, 0x00000000L, 0x00100002L, 0x04100400L,
+N                    0x04000400L, 0x04100002L, 0x04100402L, 0x00100000L,
+N                    0x04100002L, 0x00000402L, 0x00100000L, 0x04000002L,
+N                    0x00100400L, 0x04000400L, 0x00000002L, 0x04100000L,
+N                    0x04000402L, 0x00000000L, 0x00000400L, 0x00100002L,
+N                    0x00000000L, 0x04100002L, 0x04100400L, 0x00000400L,
+N                    0x04000000L, 0x04100402L, 0x00100402L, 0x00100000L,
+N                    0x04100402L, 0x00000002L, 0x04000400L, 0x00100402L,
+N                    0x00100002L, 0x00100400L, 0x04100000L, 0x04000402L,
+N                    0x00000402L, 0x04000000L, 0x04000002L, 0x04100400L,
+N                    },{
+N                        /* nibble 4 */
+N                        0x02000000L, 0x00004000L, 0x00000100L, 0x02004108L,
+N                        0x02004008L, 0x02000100L, 0x00004108L, 0x02004000L,
+N                        0x00004000L, 0x00000008L, 0x02000008L, 0x00004100L,
+N                        0x02000108L, 0x02004008L, 0x02004100L, 0x00000000L,
+N                        0x00004100L, 0x02000000L, 0x00004008L, 0x00000108L,
+N                        0x02000100L, 0x00004108L, 0x00000000L, 0x02000008L,
+N                        0x00000008L, 0x02000108L, 0x02004108L, 0x00004008L,
+N                        0x02004000L, 0x00000100L, 0x00000108L, 0x02004100L,
+N                        0x02004100L, 0x02000108L, 0x00004008L, 0x02004000L,
+N                        0x00004000L, 0x00000008L, 0x02000008L, 0x02000100L,
+N                        0x02000000L, 0x00004100L, 0x02004108L, 0x00000000L,
+N                        0x00004108L, 0x02000000L, 0x00000100L, 0x00004008L,
+N                        0x02000108L, 0x00000100L, 0x00000000L, 0x02004108L,
+N                        0x02004008L, 0x02004100L, 0x00000108L, 0x00004000L,
+N                        0x00004100L, 0x02004008L, 0x02000100L, 0x00000108L,
+N                        0x00000008L, 0x00004108L, 0x02004000L, 0x02000008L,
+N                        },{
+N                            /* nibble 5 */
+N                            0x20000010L, 0x00080010L, 0x00000000L, 0x20080800L,
+N                            0x00080010L, 0x00000800L, 0x20000810L, 0x00080000L,
+N                            0x00000810L, 0x20080810L, 0x00080800L, 0x20000000L,
+N                            0x20000800L, 0x20000010L, 0x20080000L, 0x00080810L,
+N                            0x00080000L, 0x20000810L, 0x20080010L, 0x00000000L,
+N                            0x00000800L, 0x00000010L, 0x20080800L, 0x20080010L,
+N                            0x20080810L, 0x20080000L, 0x20000000L, 0x00000810L,
+N                            0x00000010L, 0x00080800L, 0x00080810L, 0x20000800L,
+N                            0x00000810L, 0x20000000L, 0x20000800L, 0x00080810L,
+N                            0x20080800L, 0x00080010L, 0x00000000L, 0x20000800L,
+N                            0x20000000L, 0x00000800L, 0x20080010L, 0x00080000L,
+N                            0x00080010L, 0x20080810L, 0x00080800L, 0x00000010L,
+N                            0x20080810L, 0x00080800L, 0x00080000L, 0x20000810L,
+N                            0x20000010L, 0x20080000L, 0x00080810L, 0x00000000L,
+N                            0x00000800L, 0x20000010L, 0x20000810L, 0x20080800L,
+N                            0x20080000L, 0x00000810L, 0x00000010L, 0x20080010L,
+N                            },{
+N                                /* nibble 6 */
+N                                0x00001000L, 0x00000080L, 0x00400080L, 0x00400001L,
+N                                0x00401081L, 0x00001001L, 0x00001080L, 0x00000000L,
+N                                0x00400000L, 0x00400081L, 0x00000081L, 0x00401000L,
+N                                0x00000001L, 0x00401080L, 0x00401000L, 0x00000081L,
+N                                0x00400081L, 0x00001000L, 0x00001001L, 0x00401081L,
+N                                0x00000000L, 0x00400080L, 0x00400001L, 0x00001080L,
+N                                0x00401001L, 0x00001081L, 0x00401080L, 0x00000001L,
+N                                0x00001081L, 0x00401001L, 0x00000080L, 0x00400000L,
+N                                0x00001081L, 0x00401000L, 0x00401001L, 0x00000081L,
+N                                0x00001000L, 0x00000080L, 0x00400000L, 0x00401001L,
+N                                0x00400081L, 0x00001081L, 0x00001080L, 0x00000000L,
+N                                0x00000080L, 0x00400001L, 0x00000001L, 0x00400080L,
+N                                0x00000000L, 0x00400081L, 0x00400080L, 0x00001080L,
+N                                0x00000081L, 0x00001000L, 0x00401081L, 0x00400000L,
+N                                0x00401080L, 0x00000001L, 0x00001001L, 0x00401081L,
+N                                0x00400001L, 0x00401080L, 0x00401000L, 0x00001001L,
+N                                },{
+N                                    /* nibble 7 */
+N                                    0x08200020L, 0x08208000L, 0x00008020L, 0x00000000L,
+N                                    0x08008000L, 0x00200020L, 0x08200000L, 0x08208020L,
+N                                    0x00000020L, 0x08000000L, 0x00208000L, 0x00008020L,
+N                                    0x00208020L, 0x08008020L, 0x08000020L, 0x08200000L,
+N                                    0x00008000L, 0x00208020L, 0x00200020L, 0x08008000L,
+N                                    0x08208020L, 0x08000020L, 0x00000000L, 0x00208000L,
+N                                    0x08000000L, 0x00200000L, 0x08008020L, 0x08200020L,
+N                                    0x00200000L, 0x00008000L, 0x08208000L, 0x00000020L,
+N                                    0x00200000L, 0x00008000L, 0x08000020L, 0x08208020L,
+N                                    0x00008020L, 0x08000000L, 0x00000000L, 0x00208000L,
+N                                    0x08200020L, 0x08008020L, 0x08008000L, 0x00200020L,
+N                                    0x08208000L, 0x00000020L, 0x00200020L, 0x08008000L,
+N                                    0x08208020L, 0x00200000L, 0x08200000L, 0x08000020L,
+N                                    0x00208000L, 0x00008020L, 0x08008020L, 0x08200000L,
+N                                    0x00000020L, 0x08208000L, 0x00208020L, 0x00000000L,
+N                                    0x08000000L, 0x08200020L, 0x00008000L, 0x00208020L,
+N                                    }};
+N
+Nstatic const ULONG des_skb[8][64]={
+N{
+N        /* for C bits (numbered as per FIPS 46) 1 2 3 4 5 6 */
+N        0x00000000L,0x00000010L,0x20000000L,0x20000010L,
+N        0x00010000L,0x00010010L,0x20010000L,0x20010010L,
+N        0x00000800L,0x00000810L,0x20000800L,0x20000810L,
+N        0x00010800L,0x00010810L,0x20010800L,0x20010810L,
+N        0x00000020L,0x00000030L,0x20000020L,0x20000030L,
+N        0x00010020L,0x00010030L,0x20010020L,0x20010030L,
+N        0x00000820L,0x00000830L,0x20000820L,0x20000830L,
+N        0x00010820L,0x00010830L,0x20010820L,0x20010830L,
+N        0x00080000L,0x00080010L,0x20080000L,0x20080010L,
+N        0x00090000L,0x00090010L,0x20090000L,0x20090010L,
+N        0x00080800L,0x00080810L,0x20080800L,0x20080810L,
+N        0x00090800L,0x00090810L,0x20090800L,0x20090810L,
+N        0x00080020L,0x00080030L,0x20080020L,0x20080030L,
+N        0x00090020L,0x00090030L,0x20090020L,0x20090030L,
+N        0x00080820L,0x00080830L,0x20080820L,0x20080830L,
+N        0x00090820L,0x00090830L,0x20090820L,0x20090830L,
+N        },{
+N            /* for C bits (numbered as per FIPS 46) 7 8 10 11 12 13 */
+N            0x00000000L,0x02000000L,0x00002000L,0x02002000L,
+N            0x00200000L,0x02200000L,0x00202000L,0x02202000L,
+N            0x00000004L,0x02000004L,0x00002004L,0x02002004L,
+N            0x00200004L,0x02200004L,0x00202004L,0x02202004L,
+N            0x00000400L,0x02000400L,0x00002400L,0x02002400L,
+N            0x00200400L,0x02200400L,0x00202400L,0x02202400L,
+N            0x00000404L,0x02000404L,0x00002404L,0x02002404L,
+N            0x00200404L,0x02200404L,0x00202404L,0x02202404L,
+N            0x10000000L,0x12000000L,0x10002000L,0x12002000L,
+N            0x10200000L,0x12200000L,0x10202000L,0x12202000L,
+N            0x10000004L,0x12000004L,0x10002004L,0x12002004L,
+N            0x10200004L,0x12200004L,0x10202004L,0x12202004L,
+N            0x10000400L,0x12000400L,0x10002400L,0x12002400L,
+N            0x10200400L,0x12200400L,0x10202400L,0x12202400L,
+N            0x10000404L,0x12000404L,0x10002404L,0x12002404L,
+N            0x10200404L,0x12200404L,0x10202404L,0x12202404L,
+N            },{
+N                /* for C bits (numbered as per FIPS 46) 14 15 16 17 19 20 */
+N                0x00000000L,0x00000001L,0x00040000L,0x00040001L,
+N                0x01000000L,0x01000001L,0x01040000L,0x01040001L,
+N                0x00000002L,0x00000003L,0x00040002L,0x00040003L,
+N                0x01000002L,0x01000003L,0x01040002L,0x01040003L,
+N                0x00000200L,0x00000201L,0x00040200L,0x00040201L,
+N                0x01000200L,0x01000201L,0x01040200L,0x01040201L,
+N                0x00000202L,0x00000203L,0x00040202L,0x00040203L,
+N                0x01000202L,0x01000203L,0x01040202L,0x01040203L,
+N                0x08000000L,0x08000001L,0x08040000L,0x08040001L,
+N                0x09000000L,0x09000001L,0x09040000L,0x09040001L,
+N                0x08000002L,0x08000003L,0x08040002L,0x08040003L,
+N                0x09000002L,0x09000003L,0x09040002L,0x09040003L,
+N                0x08000200L,0x08000201L,0x08040200L,0x08040201L,
+N                0x09000200L,0x09000201L,0x09040200L,0x09040201L,
+N                0x08000202L,0x08000203L,0x08040202L,0x08040203L,
+N                0x09000202L,0x09000203L,0x09040202L,0x09040203L,
+N                },{
+N                    /* for C bits (numbered as per FIPS 46) 21 23 24 26 27 28 */
+N                    0x00000000L,0x00100000L,0x00000100L,0x00100100L,
+N                    0x00000008L,0x00100008L,0x00000108L,0x00100108L,
+N                    0x00001000L,0x00101000L,0x00001100L,0x00101100L,
+N                    0x00001008L,0x00101008L,0x00001108L,0x00101108L,
+N                    0x04000000L,0x04100000L,0x04000100L,0x04100100L,
+N                    0x04000008L,0x04100008L,0x04000108L,0x04100108L,
+N                    0x04001000L,0x04101000L,0x04001100L,0x04101100L,
+N                    0x04001008L,0x04101008L,0x04001108L,0x04101108L,
+N                    0x00020000L,0x00120000L,0x00020100L,0x00120100L,
+N                    0x00020008L,0x00120008L,0x00020108L,0x00120108L,
+N                    0x00021000L,0x00121000L,0x00021100L,0x00121100L,
+N                    0x00021008L,0x00121008L,0x00021108L,0x00121108L,
+N                    0x04020000L,0x04120000L,0x04020100L,0x04120100L,
+N                    0x04020008L,0x04120008L,0x04020108L,0x04120108L,
+N                    0x04021000L,0x04121000L,0x04021100L,0x04121100L,
+N                    0x04021008L,0x04121008L,0x04021108L,0x04121108L,
+N                    },{
+N                        /* for D bits (numbered as per FIPS 46) 1 2 3 4 5 6 */
+N                        0x00000000L,0x10000000L,0x00010000L,0x10010000L,
+N                        0x00000004L,0x10000004L,0x00010004L,0x10010004L,
+N                        0x20000000L,0x30000000L,0x20010000L,0x30010000L,
+N                        0x20000004L,0x30000004L,0x20010004L,0x30010004L,
+N                        0x00100000L,0x10100000L,0x00110000L,0x10110000L,
+N                        0x00100004L,0x10100004L,0x00110004L,0x10110004L,
+N                        0x20100000L,0x30100000L,0x20110000L,0x30110000L,
+N                        0x20100004L,0x30100004L,0x20110004L,0x30110004L,
+N                        0x00001000L,0x10001000L,0x00011000L,0x10011000L,
+N                        0x00001004L,0x10001004L,0x00011004L,0x10011004L,
+N                        0x20001000L,0x30001000L,0x20011000L,0x30011000L,
+N                        0x20001004L,0x30001004L,0x20011004L,0x30011004L,
+N                        0x00101000L,0x10101000L,0x00111000L,0x10111000L,
+N                        0x00101004L,0x10101004L,0x00111004L,0x10111004L,
+N                        0x20101000L,0x30101000L,0x20111000L,0x30111000L,
+N                        0x20101004L,0x30101004L,0x20111004L,0x30111004L,
+N                        },{
+N                            /* for D bits (numbered as per FIPS 46) 8 9 11 12 13 14 */
+N                            0x00000000L,0x08000000L,0x00000008L,0x08000008L,
+N                            0x00000400L,0x08000400L,0x00000408L,0x08000408L,
+N                            0x00020000L,0x08020000L,0x00020008L,0x08020008L,
+N                            0x00020400L,0x08020400L,0x00020408L,0x08020408L,
+N                            0x00000001L,0x08000001L,0x00000009L,0x08000009L,
+N                            0x00000401L,0x08000401L,0x00000409L,0x08000409L,
+N                            0x00020001L,0x08020001L,0x00020009L,0x08020009L,
+N                            0x00020401L,0x08020401L,0x00020409L,0x08020409L,
+N                            0x02000000L,0x0A000000L,0x02000008L,0x0A000008L,
+N                            0x02000400L,0x0A000400L,0x02000408L,0x0A000408L,
+N                            0x02020000L,0x0A020000L,0x02020008L,0x0A020008L,
+N                            0x02020400L,0x0A020400L,0x02020408L,0x0A020408L,
+N                            0x02000001L,0x0A000001L,0x02000009L,0x0A000009L,
+N                            0x02000401L,0x0A000401L,0x02000409L,0x0A000409L,
+N                            0x02020001L,0x0A020001L,0x02020009L,0x0A020009L,
+N                            0x02020401L,0x0A020401L,0x02020409L,0x0A020409L,
+N                            },{
+N                                /* for D bits (numbered as per FIPS 46) 16 17 18 19 20 21 */
+N                                0x00000000L,0x00000100L,0x00080000L,0x00080100L,
+N                                0x01000000L,0x01000100L,0x01080000L,0x01080100L,
+N                                0x00000010L,0x00000110L,0x00080010L,0x00080110L,
+N                                0x01000010L,0x01000110L,0x01080010L,0x01080110L,
+N                                0x00200000L,0x00200100L,0x00280000L,0x00280100L,
+N                                0x01200000L,0x01200100L,0x01280000L,0x01280100L,
+N                                0x00200010L,0x00200110L,0x00280010L,0x00280110L,
+N                                0x01200010L,0x01200110L,0x01280010L,0x01280110L,
+N                                0x00000200L,0x00000300L,0x00080200L,0x00080300L,
+N                                0x01000200L,0x01000300L,0x01080200L,0x01080300L,
+N                                0x00000210L,0x00000310L,0x00080210L,0x00080310L,
+N                                0x01000210L,0x01000310L,0x01080210L,0x01080310L,
+N                                0x00200200L,0x00200300L,0x00280200L,0x00280300L,
+N                                0x01200200L,0x01200300L,0x01280200L,0x01280300L,
+N                                0x00200210L,0x00200310L,0x00280210L,0x00280310L,
+N                                0x01200210L,0x01200310L,0x01280210L,0x01280310L,
+N                                },{
+N                                    /* for D bits (numbered as per FIPS 46) 22 23 24 25 27 28 */
+N                                    0x00000000L,0x04000000L,0x00040000L,0x04040000L,
+N                                    0x00000002L,0x04000002L,0x00040002L,0x04040002L,
+N                                    0x00002000L,0x04002000L,0x00042000L,0x04042000L,
+N                                    0x00002002L,0x04002002L,0x00042002L,0x04042002L,
+N                                    0x00000020L,0x04000020L,0x00040020L,0x04040020L,
+N                                    0x00000022L,0x04000022L,0x00040022L,0x04040022L,
+N                                    0x00002020L,0x04002020L,0x00042020L,0x04042020L,
+N                                    0x00002022L,0x04002022L,0x00042022L,0x04042022L,
+N                                    0x00000800L,0x04000800L,0x00040800L,0x04040800L,
+N                                    0x00000802L,0x04000802L,0x00040802L,0x04040802L,
+N                                    0x00002800L,0x04002800L,0x00042800L,0x04042800L,
+N                                    0x00002802L,0x04002802L,0x00042802L,0x04042802L,
+N                                    0x00000820L,0x04000820L,0x00040820L,0x04040820L,
+N                                    0x00000822L,0x04000822L,0x00040822L,0x04040822L,
+N                                    0x00002820L,0x04002820L,0x00042820L,0x04042820L,
+N                                    0x00002822L,0x04002822L,0x00042822L,0x04042822L,
+N                                    }};
+N
+N#define D_ENCRYPT(L,R,S)        \
+N	U.l=R^s[S+1]; \
+N	T.s[0]=((U.s[0]>>4)|(U.s[1]<<12))&0x3f3f; \
+N	T.s[1]=((U.s[1]>>4)|(U.s[0]<<12))&0x3f3f; \
+N	U.l=(R^s[S  ])&0x3f3f3f3fL; \
+N	L^=	des_SPtrans[1][(T.c[0])]| \
+N		des_SPtrans[3][(T.c[1])]| \
+N		des_SPtrans[5][(T.c[2])]| \
+N		des_SPtrans[7][(T.c[3])]| \
+N		des_SPtrans[0][(U.c[0])]| \
+N		des_SPtrans[2][(U.c[1])]| \
+N		des_SPtrans[4][(U.c[2])]| \
+N                des_SPtrans[6][(U.c[3])];
+X#define D_ENCRYPT(L,R,S)        	U.l=R^s[S+1]; 	T.s[0]=((U.s[0]>>4)|(U.s[1]<<12))&0x3f3f; 	T.s[1]=((U.s[1]>>4)|(U.s[0]<<12))&0x3f3f; 	U.l=(R^s[S  ])&0x3f3f3f3fL; 	L^=	des_SPtrans[1][(T.c[0])]| 		des_SPtrans[3][(T.c[1])]| 		des_SPtrans[5][(T.c[2])]| 		des_SPtrans[7][(T.c[3])]| 		des_SPtrans[0][(U.c[0])]| 		des_SPtrans[2][(U.c[1])]| 		des_SPtrans[4][(U.c[2])]|                 des_SPtrans[6][(U.c[3])];
+N
+N
+Nstatic void des_encrypt (ULONG *data,    /* data to encrypt */
+N                         des_key_schedule ks,    /* key schedule */
+N                         INT encrypt);           /* encrpyt or decrypt flag */
+N
+N                     /* DES ECB encryption */
+Nstatic void des_ecb_encrypt (des_cblock *input,      /* input 8-byte block */
+N                             des_cblock *output,     /* output 8-byte block */
+N                             des_key_schedule ks,    /* key schedule */
+N                             INT encrypt)            /* encrypt or decrypt flag */
+N{
+N    register ULONG l0, l1;
+N    register BYTE *in, *out;
+N    ULONG ll[2];
+N
+N    in=(BYTE *)input;
+N    out=(BYTE *)output;
+N    c2l (in, l0); ll[0]=l0;
+X    (l0 =((ULONG)(*((in)++))) , l0|=((ULONG)(*((in)++)))<< 8L, l0|=((ULONG)(*((in)++)))<<16L, l0|=((ULONG)(*((in)++)))<<24L); ll[0]=l0;
+N    c2l (in, l1); ll[1]=l1;
+X    (l1 =((ULONG)(*((in)++))) , l1|=((ULONG)(*((in)++)))<< 8L, l1|=((ULONG)(*((in)++)))<<16L, l1|=((ULONG)(*((in)++)))<<24L); ll[1]=l1;
+N    des_encrypt (ll, ks, encrypt);
+N    l0=ll[0]; l2c (l0, out);
+X    l0=ll[0]; (*((out)++)=(BYTE)(((l0) )&0xff), *((out)++)=(BYTE)(((l0)>> 8L)&0xff), *((out)++)=(BYTE)(((l0)>>16L)&0xff), *((out)++)=(BYTE)(((l0)>>24L)&0xff));
+N    l1=ll[1]; l2c (l1, out);
+X    l1=ll[1]; (*((out)++)=(BYTE)(((l1) )&0xff), *((out)++)=(BYTE)(((l1)>> 8L)&0xff), *((out)++)=(BYTE)(((l1)>>16L)&0xff), *((out)++)=(BYTE)(((l1)>>24L)&0xff));
+N    l0=l1=ll[0]=ll[1]=0;
+N}
+N
+N/* actual DES ECB encryption */
+Nstatic void des_encrypt (ULONG *data,    /* data to encrypt */
+N                         des_key_schedule ks,    /* key schedule */
+N                         INT encrypt)            /* encrpyt or decrypt flag */
+N{
+N    register ULONG l, r, u;
+N    union fudge
+N    {
+N        ULONG  l;
+N        USHORT s[2];
+N        BYTE  c[4];
+N    } U, T;
+N    register INT i;
+N    register ULONG *s;
+N
+N    u=data[0];
+N    r=data[1];
+N
+N    IP (u, r);
+X    { register ULONG tt; ((tt)=((((r)>>(4))^(u))&(0x0f0f0f0fL)), (u)^=(tt), (r)=((r)^((tt)<<(4)))); ((tt)=((((u)>>(16))^(r))&(0x0000ffffL)), (r)^=(tt), (u)=((u)^((tt)<<(16)))); ((tt)=((((r)>>(2))^(u))&(0x33333333L)), (u)^=(tt), (r)=((r)^((tt)<<(2)))); ((tt)=((((u)>>(8))^(r))&(0x00ff00ffL)), (r)^=(tt), (u)=((u)^((tt)<<(8)))); ((tt)=((((r)>>(1))^(u))&(0x55555555L)), (u)^=(tt), (r)=((r)^((tt)<<(1)))); };
+N    /* Things have been modified so that the initial rotate is
+N     * done outside the loop.  This required the
+N     * des_SPtrans values in sp.h to be rotated 1 bit to the right.
+N     * One perl script later and things have a 5% speed up on a sparc2.
+N     * Thanks to Richard Outerbridge <71755.204@CompuServe.COM>
+N     * for pointing this out. */
+N
+N    l=(r<<1)|(r>>31);
+N    r=(u<<1)|(u>>31);
+N
+N    /* clear the top bits on machines with 8byte longs */
+N    l&=0xffffffffL;
+N    r&=0xffffffffL;
+N
+N    s=(ULONG *)ks;
+N    /* I don't know if it is worth the effort of loop unrolling the
+N     * inner loop */
+N    if(encrypt)
+N    {
+N        for(i=0; i<32; i+=4)
+N        {
+N            D_ENCRYPT (l, r, i+0); /*  1 */
+X            U . l=r^s[i+0+1]; T . s[0]=((U . s[0]>>4)|(U . s[1]<<12))&0x3f3f; T . s[1]=((U . s[1]>>4)|(U . s[0]<<12))&0x3f3f; U . l=(r^s[i+0 ])&0x3f3f3f3fL; l^= des_SPtrans[1][(T . c[0])]| des_SPtrans[3][(T . c[1])]| des_SPtrans[5][(T . c[2])]| des_SPtrans[7][(T . c[3])]| des_SPtrans[0][(U . c[0])]| des_SPtrans[2][(U . c[1])]| des_SPtrans[4][(U . c[2])]| des_SPtrans[6][(U . c[3])];;  
+N            D_ENCRYPT (r, l, i+2); /*  2 */
+X            U . l=l^s[i+2+1]; T . s[0]=((U . s[0]>>4)|(U . s[1]<<12))&0x3f3f; T . s[1]=((U . s[1]>>4)|(U . s[0]<<12))&0x3f3f; U . l=(l^s[i+2 ])&0x3f3f3f3fL; r^= des_SPtrans[1][(T . c[0])]| des_SPtrans[3][(T . c[1])]| des_SPtrans[5][(T . c[2])]| des_SPtrans[7][(T . c[3])]| des_SPtrans[0][(U . c[0])]| des_SPtrans[2][(U . c[1])]| des_SPtrans[4][(U . c[2])]| des_SPtrans[6][(U . c[3])];;  
+N        }
+N    }
+N    else
+N    {
+N        for(i=30; i>0; i-=4)
+N        {
+N            D_ENCRYPT (l, r, i-0); /* 16 */
+X            U . l=r^s[i-0+1]; T . s[0]=((U . s[0]>>4)|(U . s[1]<<12))&0x3f3f; T . s[1]=((U . s[1]>>4)|(U . s[0]<<12))&0x3f3f; U . l=(r^s[i-0 ])&0x3f3f3f3fL; l^= des_SPtrans[1][(T . c[0])]| des_SPtrans[3][(T . c[1])]| des_SPtrans[5][(T . c[2])]| des_SPtrans[7][(T . c[3])]| des_SPtrans[0][(U . c[0])]| des_SPtrans[2][(U . c[1])]| des_SPtrans[4][(U . c[2])]| des_SPtrans[6][(U . c[3])];;  
+N            D_ENCRYPT (r, l, i-2); /* 15 */
+X            U . l=l^s[i-2+1]; T . s[0]=((U . s[0]>>4)|(U . s[1]<<12))&0x3f3f; T . s[1]=((U . s[1]>>4)|(U . s[0]<<12))&0x3f3f; U . l=(l^s[i-2 ])&0x3f3f3f3fL; r^= des_SPtrans[1][(T . c[0])]| des_SPtrans[3][(T . c[1])]| des_SPtrans[5][(T . c[2])]| des_SPtrans[7][(T . c[3])]| des_SPtrans[0][(U . c[0])]| des_SPtrans[2][(U . c[1])]| des_SPtrans[4][(U . c[2])]| des_SPtrans[6][(U . c[3])];;  
+N        }
+N    }
+N    l=(l>>1)|(l<<31);
+N    r=(r>>1)|(r<<31);
+N    /* clear the top bits on machines with 8byte longs */
+N    l&=0xffffffffL;
+N    r&=0xffffffffL;
+N
+N    FP (r, l);
+X    { register ULONG tt; ((tt)=((((r)>>(1))^(l))&(0x55555555L)), (l)^=(tt), (r)=((r)^((tt)<<(1)))); ((tt)=((((l)>>(8))^(r))&(0x00ff00ffL)), (r)^=(tt), (l)=((l)^((tt)<<(8)))); ((tt)=((((r)>>(2))^(l))&(0x33333333L)), (l)^=(tt), (r)=((r)^((tt)<<(2)))); ((tt)=((((l)>>(16))^(r))&(0x0000ffffL)), (r)^=(tt), (l)=((l)^((tt)<<(16)))); ((tt)=((((r)>>(4))^(l))&(0x0f0f0f0fL)), (l)^=(tt), (r)=((r)^((tt)<<(4)))); };
+N    data[0]=l;
+N    data[1]=r;
+N    l=r=u=0;
+N}
+N
+Nstatic INT des_set_key (des_cblock *key, des_key_schedule schedule)
+N{
+N    register ULONG c, d, t, s;
+N    register BYTE *in;
+N    register ULONG *k;
+N    register INT i;
+N
+N    k=(ULONG *)schedule;
+N    in=(BYTE *)key;
+N
+N    c2l (in, c);
+X    (c =((ULONG)(*((in)++))) , c|=((ULONG)(*((in)++)))<< 8L, c|=((ULONG)(*((in)++)))<<16L, c|=((ULONG)(*((in)++)))<<24L);
+N    c2l (in, d);
+X    (d =((ULONG)(*((in)++))) , d|=((ULONG)(*((in)++)))<< 8L, d|=((ULONG)(*((in)++)))<<16L, d|=((ULONG)(*((in)++)))<<24L);
+N
+N    PERM_OP (d, c, t, 4, 0x0f0f0f0fL);
+X    ((t)=((((d)>>(4))^(c))&(0x0f0f0f0fL)), (c)^=(t), (d)=((d)^((t)<<(4))));
+N    HPERM_OP (c, t, -2, 0xcccc0000L);
+X    ((t)=((((c)<<(16-(-2)))^(c))&(0xcccc0000L)), (c)=(c)^(t)^(t>>(16-(-2))));
+N    HPERM_OP (d, t, -2, 0xcccc0000L);
+X    ((t)=((((d)<<(16-(-2)))^(d))&(0xcccc0000L)), (d)=(d)^(t)^(t>>(16-(-2))));
+N    PERM_OP (d, c, t, 1, 0x55555555L);
+X    ((t)=((((d)>>(1))^(c))&(0x55555555L)), (c)^=(t), (d)=((d)^((t)<<(1))));
+N    PERM_OP (c, d, t, 8, 0x00ff00ffL);
+X    ((t)=((((c)>>(8))^(d))&(0x00ff00ffL)), (d)^=(t), (c)=((c)^((t)<<(8))));
+N    PERM_OP (d, c, t, 1, 0x55555555L);
+X    ((t)=((((d)>>(1))^(c))&(0x55555555L)), (c)^=(t), (d)=((d)^((t)<<(1))));
+N    d=(((d&0x000000ffL)<<16L)|(d&0x0000ff00L)|
+N        ((d&0x00ff0000L)>>16L)|((c&0xf0000000L)>>4L));
+N    c&=0x0fffffffL;
+N
+N    for(i=0; i<ITERATIONS; i++)
+X    for(i=0; i<16; i++)
+N    {
+N        if(shifts2[i])
+N        {
+N            c=((c>>2L)|(c<<26L)); d=((d>>2L)|(d<<26L));
+N        }
+N        else
+N        {
+N            c=((c>>1L)|(c<<27L)); d=((d>>1L)|(d<<27L));
+N        }
+N        c&=0x0fffffffL;
+N        d&=0x0fffffffL;
+N        /* could be a few less shifts but I am to lazy at this
+N         * point in time to investigate */
+N        s=des_skb[0][(c)&0x3f]|
+N            des_skb[1][((c>>6)&0x03)|((c>>7L)&0x3c)]|
+N            des_skb[2][((c>>13)&0x0f)|((c>>14L)&0x30)]|
+N            des_skb[3][((c>>20)&0x01)|((c>>21L)&0x06)|
+N            ((c>>22L)&0x38)];
+N        t=des_skb[4][(d)&0x3f]|
+N            des_skb[5][((d>>7L)&0x03)|((d>>8L)&0x3c)]|
+N            des_skb[6][(d>>15L)&0x3f]|
+N            des_skb[7][((d>>21L)&0x0f)|((d>>22L)&0x30)];
+N
+N        /* table contained 0213 4657 */
+N        *(k++)=((t<<16L)|(s&0x0000ffffL))&0xffffffffL;
+N        s=((s>>16L)|(t&0xffff0000L));
+N
+N        s=(s<<4L)|(s>>28L);
+N        *(k++)=s&0xffffffffL;
+N    }
+N    return(0);
+N}
+N
+N/*----------------------------------------------------------------------*
+N * Encrypt/Decrypt using DES for a block of 8 bytes
+N *----------------------------------------------------------------------*/
+Nvoid CscryptEncrypt (BYTE *key,         /* 8-byte key */
+N                     BYTE *in,          /* block to be encrypted */
+N                     BYTE *out,         /* encrypted data */
+N                     INT encrypt)                /*	DES
+N                                                     1=encrypt, 0=decrypt
+N                                                     3DES
+N                                                     31=encrypt, 30=decrypt */
+N{
+N    BYTE b3Des=encrypt>=DES3CODE;
+X    BYTE b3Des=encrypt>=30;
+N
+N    des_key_schedule ks;
+N
+N    if(b3Des)
+N        encrypt-=DES3CODE;
+X        encrypt-=30;
+N    des_set_key ((des_cblock *)key, ks);
+N    des_ecb_encrypt ((des_cblock *)in,      /* input 8-byte block */
+N        (des_cblock *)out,     /* output 8-byte block */
+N                     ks,                     /* key schedule */
+N                     encrypt);               /* encrypt or decrypt flag */
+N    if(b3Des)
+N    {
+N        des_set_key ((des_cblock *)(key+8), ks);
+N        des_ecb_encrypt ((des_cblock *)out,  /* input 8-byte block */
+N            (des_cblock *)out,     /* output 8-byte block */
+N                         ks,                     /* key schedule */
+N                         1-encrypt);               /* encrypt or decrypt flag */
+N        des_set_key ((des_cblock *)key, ks);
+N        des_ecb_encrypt ((des_cblock *)out,  /* input 8-byte block */
+N            (des_cblock *)out,     /* output 8-byte block */
+N                         ks,                     /* key schedule */
+N                         encrypt);               /* encrypt or decrypt flag */
+N    }
+N}
+N
+N/*----------------------------------------------------------------------*
+N * Encrypt/Decrypt using DES for a block of data
+N * - make sure data block has space for multiple of 8-byte
+N *----------------------------------------------------------------------*/
+Nvoid CscryptEncryptBlock (BYTE *key,        /* the key */
+N                          BYTE *blk,         /* the data block */
+N                          INT length,                 /* data length */
+N                          INT encrypt)                /* encrypt or decrypt */
+N{
+N    INT i;
+N
+N    for(i=0; i<length; i+=8)
+N        CscryptEncrypt (key, &blk[i], &blk[i], encrypt);
+N}

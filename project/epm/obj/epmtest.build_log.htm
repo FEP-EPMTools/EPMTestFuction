@@ -1,0 +1,50 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: £gVision V5.28.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: a a, a, LIC=MGX74-FE5C0-RDAK3-A4RYA-LU2XR-U24XL
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.28.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARM.DLL V5.28.0.0
+Dialog DLL:      DARMATS9.DLL V1.22.0.0
+Target DLL:      UL2ARM.DLL V1.74.10.0
+Dialog DLL:      TARMATS9.DLL V1.21.0.0
+ 
+<h2>Project:</h2>
+D:\Work\EPM Project\MDK Workspace\epm_1_6_9_2008191200\project\epm_1_6_9_2008191200\epm2.uvproj
+Project File Date:  08/19/2020
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'epmtest'
+compiling uart4drv.c...
+src\userdrv\uart4drv.c(162): warning:  #111-D: statement is unreachable
+      return uartRead(param.ucUartNo, pucBuf, uLen);
+src\userdrv\uart4drv.c: 1 warning, 0 errors
+compiling fwremoteota.c...
+src\userdrv\fwremoteota.c(199): warning:  #111-D: statement is unreachable
+      return TRUE;
+src\userdrv\fwremoteota.c(201): warning:  #1-D: last line of file ends without a newline
+                                                  
+src\userdrv\fwremoteota.c: 2 warnings, 0 errors
+compiling main.c...
+linking...
+Program Size: Code=642864 RO-data=26772 RW-data=11112 ZI-data=29702816  
+FromELF: creating hex file...
+After Build - User command #1: fromelf --bin ".\obj\epmtest.axf" --output ".\obj\epmtest.bin"
+After Build - User command #2: fromelf --text -c ".\obj\epmtest.axf" --output ".\obj\epmtest.txt"
+".\obj\epmtest.axf" - 0 Error(s), 3 Warning(s).
+Build Time Elapsed:  00:00:07
+</pre>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.\obj\mem_alloc.o: ..\..\common\src\BSP\Library\USB_HOST\src_core\mem_alloc.c
+.\obj\mem_alloc.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\obj\mem_alloc.o: C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\obj\mem_alloc.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\obj\mem_alloc.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\usb.h
+.\obj\mem_alloc.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\config.h
+.\obj\mem_alloc.o: ..\..\common\src\BSP\Driver\Include\nuc970.h
+.\obj\mem_alloc.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\obj\mem_alloc.o: ..\..\common\src\BSP\Driver\Include\sys.h
+.\obj\mem_alloc.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\usbh_lib.h
+.\obj\mem_alloc.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\ehci.h
+.\obj\mem_alloc.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\ohci.h

@@ -1,0 +1,10 @@
+.\obj\atcmdparser.o: src\syshal\modemlib\atcmdparser.c
+.\obj\atcmdparser.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\obj\atcmdparser.o: C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\obj\atcmdparser.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\obj\atcmdparser.o: ..\..\common\src\BSP\Driver\Include\nuc970.h
+.\obj\atcmdparser.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\obj\atcmdparser.o: ..\..\common\src\BSP\Driver\Include\sys.h
+.\obj\atcmdparser.o: .\src\fepconfig.h
+.\obj\atcmdparser.o: .\src\VersionMacro.h
+.\obj\atcmdparser.o: src\syshal\modemlib\atcmdparser.h

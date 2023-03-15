@@ -1,0 +1,12 @@
+.\obj\support.o: ..\..\common\src\BSP\Library\USB_HOST\src_core\support.c
+.\obj\support.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\obj\support.o: C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\obj\support.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\obj\support.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\usb.h
+.\obj\support.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\config.h
+.\obj\support.o: ..\..\common\src\BSP\Driver\Include\nuc970.h
+.\obj\support.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\obj\support.o: ..\..\common\src\BSP\Driver\Include\sys.h
+.\obj\support.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\usbh_lib.h
+.\obj\support.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\ehci.h
+.\obj\support.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\ohci.h

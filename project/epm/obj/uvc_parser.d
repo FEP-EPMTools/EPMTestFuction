@@ -1,0 +1,12 @@
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Library\USB_HOST\src_uvc\uvc_parser.c
+.\obj\uvc_parser.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\obj\uvc_parser.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Driver\Include\nuc970.h
+.\obj\uvc_parser.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\usb.h
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\config.h
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Driver\Include\sys.h
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\usbh_lib.h
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\ehci.h
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\ohci.h
+.\obj\uvc_parser.o: ..\..\common\src\BSP\Library\USB_HOST\Inc\usbh_uvc.h
