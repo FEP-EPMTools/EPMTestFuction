@@ -6275,8 +6275,10 @@ static BOOL modeminit(BOOL testflag)
 
 static BOOL modemTest(void* para1, void* para2)
 {
+		int SIMStatus;
  
     QModemLibInit(MODEM_BAUDRATE);
+	
     if(MBtestFlag )
     {     
         BOOL resultFlag1 = FALSE;      // MODEM Dialup test resultFlag
@@ -6454,18 +6456,46 @@ static BOOL modemTest(void* para1, void* para2)
         guiPrintResult("Modem Testing");
         //guiPrintMessage("Start...");
         guiPrintMessage("Start");
-        //QModemLibInit(MODEM_BAUDRATE);
-        if(QModemATCmdTest())
+        //QModemLibInit(MODEM_BAUDRATE
+
+        
+			if(QModemATCmdTest())
         {
             //guiPrintMessage((char*)retVer);
             guiPrintMessage("Modem OK");
             terninalPrintf("  modemTest [OK]\r\n");
+					
+					//剛開機無法正常讀取SIM卡狀態		
+					
+					for(int i=0;i<=2;i++)
+					{
+						QModemQuerySIMInitStatus(&SIMStatus);
+						if(SIMStatus>0)
+						{
+								break;
+						}
+						sysDelay(1000/portTICK_RATE_MS);
+					}
+					
+					if (SIMStatus>0){
+						guiPrintMessage("SIM OK");
+						terninalPrintf("  SIMTest [OK]\r\n");
+					}
+					
+					else{
+						//terninalPrintf("  modemTest [ERROR]\r\n");
+						guiPrintMessage("SIM Fail");
+						terninalPrintf("  SIMTest [Error]\r\n");
+						
+						RTCTest(para1,para2);
+						return TEST_FALSE; 
+					}
+
             return RTCTest(para1,para2);
         }
-        testErroCode = MODEM_CONNECT_ERRO;
-        //terninalPrintf("  modemTest [ERROR]\r\n");
         guiPrintMessage("Modem Fail");
         terninalPrintf("  modemTest [Error]\r\n");
+				
         RTCTest(para1,para2);
         return TEST_FALSE; 
     }
@@ -11513,7 +11543,7 @@ static BOOL ModemTool(void* para1, void* para2)
         if((SIMStatus & 0x01) || (SIMStatus & 0x02) || (SIMStatus & 0x04))
         {
             QModemDialupStart();
-            if(QModemDialupProcess() == TRUE)
+            if(QModemDialupProcess() == TRUE)QModemQuerySIMInitStatus
             {
                 terninalPrintf("\r\nMODEM Dialup SUCCESS\r\n");
                 //vTaskDelay(5000/portTICK_RATE_MS);
@@ -11550,9 +11580,6 @@ static BOOL ModemTool(void* para1, void* para2)
             QModemTerminal(CmdString,FBCmdStr,sizeof(FBCmdStr),&retlen,20);
             terninalPrintf("retn >> %s",FBCmdStr);
             //for(int i=0;i<retlen;i++)
-            //    FBCmdStr
-            
-            
             memset(CmdString,0x00,sizeof(CmdString));
             terninalPrintf("send >> ");
         }

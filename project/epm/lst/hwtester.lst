@@ -28521,9 +28521,11 @@ N
 N
 Nstatic BOOL modemTest(void* para1, void* para2)
 N{
+N		int SIMStatus;
 N 
 N    QModemLibInit(MODEM_BAUDRATE);
 X    QModemLibInit(921600);
+N	
 N    if(MBtestFlag )
 N    {     
 N        BOOL resultFlag1 = FALSE;      // MODEM Dialup test resultFlag
@@ -28733,19 +28735,48 @@ N        terninalPrintf("!!! modemTest !!!\r\n");
 N        guiPrintResult("Modem Testing");
 N        //guiPrintMessage("Start...");
 N        guiPrintMessage("Start");
-N        //QModemLibInit(MODEM_BAUDRATE);
-N        if(QModemATCmdTest())
+N        //QModemLibInit(MODEM_BAUDRATE
+N
+N        
+N			if(QModemATCmdTest())
 N        {
 N            //guiPrintMessage((char*)retVer);
 N            guiPrintMessage("Modem OK");
 N            terninalPrintf("  modemTest [OK]\r\n");
+N					
+N					//剛開機無法正常讀取SIM卡狀態		
+N					
+N					for(int i=0;i<=2;i++)
+N					{
+N						QModemQuerySIMInitStatus(&SIMStatus);
+N						if(SIMStatus>0)
+N						{
+N								break;
+N						}
+N						sysDelay(1000/portTICK_RATE_MS);
+X						sysDelay(1000/( ( TickType_t ) 1000 / ( ( TickType_t ) 100 ) ));
+N					}
+N					
+N					if (SIMStatus>0){
+N						guiPrintMessage("SIM OK");
+N						terninalPrintf("  SIMTest [OK]\r\n");
+N					}
+N					
+N					else{
+N						//terninalPrintf("  modemTest [ERROR]\r\n");
+N						guiPrintMessage("SIM Fail");
+N						terninalPrintf("  SIMTest [Error]\r\n");
+N						
+N						RTCTest(para1,para2);
+N						return TEST_FALSE; 
+X						return 0x10; 
+N					}
+N
 N            return RTCTest(para1,para2);
 N        }
-N        testErroCode = MODEM_CONNECT_ERRO;
-X        testErroCode = 0x0701;
-N        //terninalPrintf("  modemTest [ERROR]\r\n");
 N        guiPrintMessage("Modem Fail");
 N        terninalPrintf("  modemTest [Error]\r\n");
+N				
 N        RTCTest(para1,para2);
 N        return TEST_FALSE; 
 X        return 0x10; 
@@ -28798,7 +28829,7 @@ N        terninalPrintf("RTC_CURRENT_TIME: [%04d/%02d/%02d %02d:%02d:%02d (%d)  
 N            pt.u32Year, pt.u32cMonth, pt.u32cDay, 
 N            pt.u32cHour, pt.u32cMinute, pt.u32cSecond, pt.u32cDayOfWeek, pt.u8cClockDisplay, pt.u8cAmPm); 
 N        //guiPrintMessage(tString);
-W "src\user\hwtester.c" 6510 15 variable "tString" was declared but never referenced
+W "src\user\hwtester.c" 6540 15 variable "tString" was declared but never referenced
 N    }
 N    vTaskDelay(2000/portTICK_RATE_MS);//wait other task finsh
 X    vTaskDelay(2000/( ( TickType_t ) 1000 / ( ( TickType_t ) 100 ) ));
@@ -29328,7 +29359,7 @@ X        return 0x12;
 N    else
 N        return TEST_FALSE;
 X        return 0x10;
-W "src\user\hwtester.c" 6844 10 variable "NumStr" was declared but never referenced
+W "src\user\hwtester.c" 6874 10 variable "NumStr" was declared but never referenced
 N}
 N
 N
@@ -30255,7 +30286,7 @@ N            LEDBoardLightSet();
 N            MTPString[29][9] = 0x80;
 N            return FALSE;
 X            return (0);
-W "src\user\hwtester.c" 7637 13 statement is unreachable
+W "src\user\hwtester.c" 7667 13 statement is unreachable
 N            break;
 N        }
 N    }
@@ -30512,7 +30543,7 @@ N    GPIO_CloseBit(GPIOI, BIT4);
 N    */
 N    outpw(REG_SYS_GPF_MFPH,(inpw(REG_SYS_GPF_MFPH) & ~(0xF<<24)) | (0x9<<24));
 X    *((volatile unsigned int *)((0xB0000000+0x09C))) = ((*((volatile unsigned int *)((0xB0000000+0x09C)))) & ~(0xF<<24)) | (0x9<<24);
-W "src\user\hwtester.c" 7867 5 integer operation result is out of range
+W "src\user\hwtester.c" 7897 5 integer operation result is out of range
 N    outpw(REG_SYS_GPI_MFPH,(inpw(REG_SYS_GPI_MFPH) & ~(0xF<<28)) | (0x0<<28));
 X    *((volatile unsigned int *)((0xB0000000+0x0B4))) = ((*((volatile unsigned int *)((0xB0000000+0x0B4)))) & ~(0xF<<28)) | (0x0<<28);
 N    GPIO_OpenBit(GPIOI, BIT15, DIR_OUTPUT, NO_PULL_UP);
@@ -31509,7 +31540,7 @@ N        //setPrintfFlag(TRUE);
 N    }
 N    return TRUE;
 X    return (1);
-W "src\user\hwtester.c" 8664 10 variable "changeFlag" was declared but never referenced
+W "src\user\hwtester.c" 8694 10 variable "changeFlag" was declared but never referenced
 N}
 N
 N///////////////////////////RADAR Test/////////////////////////////////
@@ -31667,8 +31698,8 @@ N    {
 N        return TEST_FALSE; 
 X        return 0x10; 
 N    }
-W "src\user\hwtester.c" 8733 13 variable "ReadCmd" was declared but never referenced
-W "src\user\hwtester.c" 8741 93 variable "setFR" was declared but never referenced
+W "src\user\hwtester.c" 8763 13 variable "ReadCmd" was declared but never referenced
+W "src\user\hwtester.c" 8771 93 variable "setFR" was declared but never referenced
 N}
 N
 Nstatic BOOL NEWradarSetDefault(void* para1, void* para2)
@@ -31806,8 +31837,8 @@ N    {
 N        return TEST_FALSE; 
 X        return 0x10; 
 N    }
-W "src\user\hwtester.c" 8867 13 variable "ReadCmd" was declared but never referenced
-W "src\user\hwtester.c" 8875 71 variable "rdIndex" was declared but never referenced
+W "src\user\hwtester.c" 8897 13 variable "ReadCmd" was declared but never referenced
+W "src\user\hwtester.c" 8905 71 variable "rdIndex" was declared but never referenced
 N}
 N/*
 Nvoid UART3Callback(void)
@@ -32806,7 +32837,7 @@ X        setPrintfFlag((1));
 N    }
 N    return TRUE;
 X    return (1);
-W "src\user\hwtester.c" 9742 10 variable "changeFlag" was declared but never referenced
+W "src\user\hwtester.c" 9772 10 variable "changeFlag" was declared but never referenced
 N}
 N
 N///////////////////////////Burn  Test/////////////////////////////////
@@ -33169,9 +33200,9 @@ N                terninalPrintf("error input");
 N                break;
 N        }
 N
-W "src\user\hwtester.c" 9899 9 transfer of control bypasses initialization of:
-w "src\user\hwtester.c" 9899 9 variable "retry1" (declared at line 9982)
-w "src\user\hwtester.c" 9899 9 variable "retry2" (declared at line 10056)
+W "src\user\hwtester.c" 9929 9 transfer of control bypasses initialization of:
+w "src\user\hwtester.c" 9929 9 variable "retry1" (declared at line 10012)
+w "src\user\hwtester.c" 9929 9 variable "retry2" (declared at line 10086)
 N        if(fExit)
 N            break;
 N       terninalPrintf(" =====  [ End  ] =====\r\n");
@@ -33578,9 +33609,9 @@ N        }
 N    }
 N    return TRUE;
 X    return (1);
-W "src\user\hwtester.c" 10138 9 variable "modifyvcomValue" was declared but never referenced
-W "src\user\hwtester.c" 10141 10 variable "lastVCOMString" was declared but never referenced
-W "src\user\hwtester.c" 10142 10 variable "modifyVCOMString" was declared but never referenced
+W "src\user\hwtester.c" 10168 9 variable "modifyvcomValue" was declared but never referenced
+W "src\user\hwtester.c" 10171 10 variable "lastVCOMString" was declared but never referenced
+W "src\user\hwtester.c" 10172 10 variable "modifyVCOMString" was declared but never referenced
 N}
 N
 Nstatic BOOL NewRadarTool(void* para1, void* para2)
@@ -33799,7 +33830,7 @@ N
 N    
 N        return TRUE;
 X        return (1);
-W "src\user\hwtester.c" 10479 14 variable "FRtype" was declared but never referenced
+W "src\user\hwtester.c" 10509 14 variable "FRtype" was declared but never referenced
 N}
 N
 N
@@ -34484,18 +34515,18 @@ N      }
 N      */
 N		return TRUE;
 X		return (1);
-W "src\user\hwtester.c" 10795 14 variable "code11" was declared but never referenced
-W "src\user\hwtester.c" 10795 22 variable "code12" was declared but never referenced
-W "src\user\hwtester.c" 10795 30 variable "code13" was declared but never referenced
-W "src\user\hwtester.c" 10795 38 variable "code14" was declared but never referenced
-W "src\user\hwtester.c" 10795 46 variable "code21" was declared but never referenced
-W "src\user\hwtester.c" 10795 54 variable "code22" was declared but never referenced
-W "src\user\hwtester.c" 10795 62 variable "code23" was declared but never referenced
-W "src\user\hwtester.c" 10795 70 variable "code24" was declared but never referenced
-W "src\user\hwtester.c" 10796 9 variable "pageCounter" was declared but never referenced
-W "src\user\hwtester.c" 10797 9 variable "pagechangeFlag" was declared but never referenced
-W "src\user\hwtester.c" 10799 54 variable "tempreadLUTVersion" was declared but never referenced
-W "src\user\hwtester.c" 11069 10 variable "changeFlag" was declared but never referenced
+W "src\user\hwtester.c" 10825 14 variable "code11" was declared but never referenced
+W "src\user\hwtester.c" 10825 22 variable "code12" was declared but never referenced
+W "src\user\hwtester.c" 10825 30 variable "code13" was declared but never referenced
+W "src\user\hwtester.c" 10825 38 variable "code14" was declared but never referenced
+W "src\user\hwtester.c" 10825 46 variable "code21" was declared but never referenced
+W "src\user\hwtester.c" 10825 54 variable "code22" was declared but never referenced
+W "src\user\hwtester.c" 10825 62 variable "code23" was declared but never referenced
+W "src\user\hwtester.c" 10825 70 variable "code24" was declared but never referenced
+W "src\user\hwtester.c" 10826 9 variable "pageCounter" was declared but never referenced
+W "src\user\hwtester.c" 10827 9 variable "pagechangeFlag" was declared but never referenced
+W "src\user\hwtester.c" 10829 54 variable "tempreadLUTVersion" was declared but never referenced
+W "src\user\hwtester.c" 11099 10 variable "changeFlag" was declared but never referenced
 N}
 N
 N//====================================================/=/=======================================================//
@@ -34674,10 +34705,10 @@ N        {
 N            terninalPrintf("try again!\n");
 N        }
 N    } 
-W "src\user\hwtester.c" 11419 5 statement is unreachable
+W "src\user\hwtester.c" 11449 5 statement is unreachable
 N    return TRUE;
 X    return (1);
-W "src\user\hwtester.c" 11379 10 variable "chrtemp" was declared but never referenced
+W "src\user\hwtester.c" 11409 10 variable "chrtemp" was declared but never referenced
 N}
 N
 Nstatic BOOL KeyPadTool(void* para1, void* para2)
@@ -34780,7 +34811,7 @@ N        terninalPrintf("SIMStatus = %d\r\n",SIMStatus);
 N        if((SIMStatus & 0x01) || (SIMStatus & 0x02) || (SIMStatus & 0x04))
 N        {
 N            QModemDialupStart();
-N            if(QModemDialupProcess() == TRUE)
+N            if(QModemDialupProcess() == TRUE)QModemQuerySIMInitStatus
 N            {
 N                terninalPrintf("\r\nMODEM Dialup SUCCESS\r\n");
 N                //vTaskDelay(5000/portTICK_RATE_MS);
@@ -34817,9 +34848,6 @@ N            sprintf(CmdString,"%s\r\n",CmdString);
 N            QModemTerminal(CmdString,FBCmdStr,sizeof(FBCmdStr),&retlen,20);
 N            terninalPrintf("retn >> %s",FBCmdStr);
 N            //for(int i=0;i<retlen;i++)
-N            //    FBCmdStr
-N            
-N            
 N            memset(CmdString,0x00,sizeof(CmdString));
 N            terninalPrintf("send >> ");
 N        }
@@ -34923,7 +34951,7 @@ N        //}
 N    //}
 N    
 N
-W "src\user\hwtester.c" 11652 1 missing return statement at end of non-void function "QueryNTPfun"
+W "src\user\hwtester.c" 11679 1 missing return statement at end of non-void function "QueryNTPfun"
 N}
 N
 Nstatic BOOL toolsFunction(void* para1, void* para2)
@@ -35560,7 +35588,7 @@ N    //GPIO_ClrBit(GPIOB, BIT6);
 N    GPIO_SetBit(GPIOB, BIT6);   
 X    GPIO_SetBit(GPIOB, (0x00000040));   
 N    
-W "src\user\hwtester.c" 12189 5 integer operation result is out of range
+W "src\user\hwtester.c" 12216 5 integer operation result is out of range
 N    outpw(REG_SYS_GPI_MFPH,(inpw(REG_SYS_GPI_MFPH) & ~(0xF<<28)) | (0x0<<28));
 X    *((volatile unsigned int *)((0xB0000000+0x0B4))) = ((*((volatile unsigned int *)((0xB0000000+0x0B4)))) & ~(0xF<<28)) | (0x0<<28);
 N    GPIO_OpenBit(GPIOI, BIT15, DIR_OUTPUT, NO_PULL_UP);
@@ -35619,7 +35647,7 @@ X            enterMunu("\r\n  ************** Main Menu *************\r\nPlease S
 N        vTaskDelay(1000/portTICK_RATE_MS);
 X        vTaskDelay(1000/( ( TickType_t ) 1000 / ( ( TickType_t ) 100 ) ));
 N    }
-W "src\user\hwtester.c" 12227 9 variable "timeOut" was declared but never referenced
+W "src\user\hwtester.c" 12254 9 variable "timeOut" was declared but never referenced
 N}
 N
 NBOOL MTPTesterInit(void)
@@ -35992,7 +36020,7 @@ N                break;
 N            default:
 N                terninalPrintf("\r\nerror input");
 N                break;
-W "src\user\hwtester.c" 12487 22 variable "VCOMString" was declared but never referenced
+W "src\user\hwtester.c" 12514 22 variable "VCOMString" was declared but never referenced
 N        }
 N
 N        if(fExit)
@@ -36059,11 +36087,11 @@ N
 N    
 N    
 N    
-W "src\user\hwtester.c" 12345 9 variable "lastvcomValue" was declared but never referenced
-W "src\user\hwtester.c" 12346 9 variable "modifyvcomValue" was declared but never referenced
-W "src\user\hwtester.c" 12349 10 variable "lastVCOMString" was declared but never referenced
-W "src\user\hwtester.c" 12350 10 variable "modifyVCOMString" was declared but never referenced
-W "src\user\hwtester.c" 12351 10 variable "recoveryVCOMString" was declared but never referenced
+W "src\user\hwtester.c" 12372 9 variable "lastvcomValue" was declared but never referenced
+W "src\user\hwtester.c" 12373 9 variable "modifyvcomValue" was declared but never referenced
+W "src\user\hwtester.c" 12376 10 variable "lastVCOMString" was declared but never referenced
+W "src\user\hwtester.c" 12377 10 variable "modifyVCOMString" was declared but never referenced
+W "src\user\hwtester.c" 12378 10 variable "recoveryVCOMString" was declared but never referenced
 N}
 N
 N
@@ -36130,13 +36158,13 @@ N
 N        }
 N    }
 N    
-W "src\user\hwtester.c" 12645 9 variable "lastvcomValue" was declared but never referenced
-W "src\user\hwtester.c" 12646 9 variable "modifyvcomValue" was declared but never referenced
-W "src\user\hwtester.c" 12647 9 variable "newvcomValue" was declared but never referenced
-W "src\user\hwtester.c" 12648 9 variable "recoveryvcomValue" was declared but never referenced
-W "src\user\hwtester.c" 12649 10 variable "lastVCOMString" was declared but never referenced
-W "src\user\hwtester.c" 12650 10 variable "modifyVCOMString" was declared but never referenced
-W "src\user\hwtester.c" 12651 10 variable "recoveryVCOMString" was declared but never referenced
+W "src\user\hwtester.c" 12672 9 variable "lastvcomValue" was declared but never referenced
+W "src\user\hwtester.c" 12673 9 variable "modifyvcomValue" was declared but never referenced
+W "src\user\hwtester.c" 12674 9 variable "newvcomValue" was declared but never referenced
+W "src\user\hwtester.c" 12675 9 variable "recoveryvcomValue" was declared but never referenced
+W "src\user\hwtester.c" 12676 10 variable "lastVCOMString" was declared but never referenced
+W "src\user\hwtester.c" 12677 10 variable "modifyVCOMString" was declared but never referenced
+W "src\user\hwtester.c" 12678 10 variable "recoveryVCOMString" was declared but never referenced
 N}
 N/*
 Nuint32_t GetCardID(void){
@@ -36160,14 +36188,14 @@ N}
 N/*** * Copyright (C) 2016 Far Easy Pass LTD. All rights reserved. ***/
 N
 W "src\user\hwtester.c" 157 13 function "singleTestB" was declared but never referenced
-W "src\user\hwtester.c" 11498 13 function "ModemTool" was declared but never referenced
-W "src\user\hwtester.c" 11563 13 function "NTPTool" was declared but never referenced
+W "src\user\hwtester.c" 11528 13 function "ModemTool" was declared but never referenced
+W "src\user\hwtester.c" 11590 13 function "NTPTool" was declared but never referenced
 W "src\user\hwtester.c" 2002 13 function "versionQuery" was declared but never referenced
-W "src\user\hwtester.c" 7671 13 function "lidarSingleTest" was declared but never referenced
+W "src\user\hwtester.c" 7701 13 function "lidarSingleTest" was declared but never referenced
 W "src\user\hwtester.c" 4724 13 function "SuperCapTest" was declared but never referenced
-W "src\user\hwtester.c" 9352 13 function "radarTest" was declared but never referenced
-W "src\user\hwtester.c" 9670 13 function "lidarTest" was declared but never referenced
-W "src\user\hwtester.c" 9739 13 function "lidarPowerSet" was declared but never referenced
+W "src\user\hwtester.c" 9382 13 function "radarTest" was declared but never referenced
+W "src\user\hwtester.c" 9700 13 function "lidarTest" was declared but never referenced
+W "src\user\hwtester.c" 9769 13 function "lidarPowerSet" was declared but never referenced
 W "src\user\hwtester.c" 254 13 variable "testerResult" was declared but never referenced
 W "src\user\hwtester.c" 255 14 variable "epdString" was declared but never referenced
 W "src\user\hwtester.c" 256 13 variable "epdPrintFlag" was declared but never referenced
