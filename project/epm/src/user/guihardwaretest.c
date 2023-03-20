@@ -116,7 +116,7 @@ static void updateBG(void)
     //EPDDrawContainByIDPos(TRUE,EPD_PICT_LINE_SMALL_2_I_INDEX,130,104+(nowIndex*STRING_HEIGHT));
     EPDDrawContainByIDPos(FALSE,EPD_PICT_LINE_SMALL_2_I_INDEX,130,104+(nowIndex*STRING_HEIGHT));
     char versionString[35]; 
-    sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, getdataCode());
+    sprintf(versionString,"Ver. %d.%02d.%02d  build:%u",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, getdataCode());
     EPDDrawString(TRUE,versionString,100,700);
     //terninalPrintf("========MAIN MENU========[INFO GUI] <GuiOnDraw>  [%d0'ms].\n", xTaskGetTickCount() - tickLocalStart); 
 }

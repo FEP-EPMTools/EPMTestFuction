@@ -166,10 +166,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>12</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>131</TopLine>
-      <CurrentLine>157</CurrentLine>
+      <TopLine>133</TopLine>
+      <CurrentLine>166</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -798,10 +798,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>10</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>649</TopLine>
-      <CurrentLine>655</CurrentLine>
+      <TopLine>6446</TopLine>
+      <CurrentLine>6469</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\user\hwtester.c</PathWithFileName>
       <FilenameWithoutPath>hwtester.c</FilenameWithoutPath>
@@ -2048,7 +2048,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>240</TopLine>
+      <TopLine>232</TopLine>
       <CurrentLine>266</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\userdrv\fwremoteota.c</PathWithFileName>

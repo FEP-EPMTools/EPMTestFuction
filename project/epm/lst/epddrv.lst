@@ -20758,8 +20758,8 @@ N    else
 N    {
 N        char versionString[35]; 
 N        //sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, BUILD_VERSION_EPD);  
-N        sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, dataCode);
-X        sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",1, 9, 7, dataCode);
+N        sprintf(versionString,"Ver. %d.%02d.%02d  build:%u",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, dataCode);
+X        sprintf(versionString,"Ver. %d.%02d.%02d  build:%u",1, 9, 7, dataCode);
 N        EPDDrawString(TRUE,versionString,100,700);
 X        EPDDrawString((1),versionString,100,700);
 N    }

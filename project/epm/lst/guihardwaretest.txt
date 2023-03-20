@@ -9,6 +9,7 @@
                           REQUIRE _printf_flags
                           REQUIRE _printf_widthprec
                           REQUIRE _printf_d
+                          REQUIRE _printf_u
                           REQUIRE _printf_int_dec
                   updateBG PROC
 ;;;86     /*-----------------------------------------*/
@@ -119,7 +120,7 @@
 000114  e3a00000          MOV      r0,#0
 000118  ebfffffe          BL       EPDDrawContainByIDPos
 ;;;118        char versionString[35]; 
-;;;119        sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, getdataCode());
+;;;119        sprintf(versionString,"Ver. %d.%02d.%02d  build:%u",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, getdataCode());
 00011c  ebfffffe          BL       getdataCode
 000120  e1a04000          MOV      r4,r0
 000124  e3a00007          MOV      r0,#7
@@ -224,13 +225,13 @@
                   |L1.552|
                           DCD      nowIndex
                   |L1.556|
-00022c  5665722e          DCB      "Ver. %d.%02d.%02d  build:%d",0
+00022c  5665722e          DCB      "Ver. %d.%02d.%02d  build:%u",0
 000230  2025642e
 000234  25303264
 000238  2e253032
 00023c  64202062
 000240  75696c64
-000244  3a256400
+000244  3a257500
                   |L1.584|
                           DCD      powerStatus
                   |L1.588|

@@ -272,6 +272,7 @@ Section Cross References
     guihardwaretest.o(.text) refers to _printf_pad.o(.text) for _printf_pre_padding
     guihardwaretest.o(.text) refers to _printf_percent.o(.ARM.Collect$$_printf_percent$$00000000) for _printf_percent
     guihardwaretest.o(.text) refers to _printf_d.o(.ARM.Collect$$_printf_percent$$00000009) for _printf_d
+    guihardwaretest.o(.text) refers to _printf_u.o(.ARM.Collect$$_printf_percent$$0000000A) for _printf_u
     guihardwaretest.o(.text) refers to _printf_dec.o(.text) for _printf_int_dec
     guihardwaretest.o(.text) refers to epddrv.o(.text) for EPDDrawMulti
     guihardwaretest.o(.text) refers to __2sprintf.o(.text) for __2sprintf
@@ -499,6 +500,7 @@ Section Cross References
     epddrv.o(.text) refers to _printf_pad.o(.text) for _printf_pre_padding
     epddrv.o(.text) refers to _printf_percent.o(.ARM.Collect$$_printf_percent$$00000000) for _printf_percent
     epddrv.o(.text) refers to _printf_d.o(.ARM.Collect$$_printf_percent$$00000009) for _printf_d
+    epddrv.o(.text) refers to _printf_u.o(.ARM.Collect$$_printf_percent$$0000000A) for _printf_u
     epddrv.o(.text) refers to _printf_dec.o(.text) for _printf_int_dec
     epddrv.o(.text) refers to sys_uart.o(.text) for sysprintf
     epddrv.o(.text) refers to gpio.o(.text) for GPIO_SetBit

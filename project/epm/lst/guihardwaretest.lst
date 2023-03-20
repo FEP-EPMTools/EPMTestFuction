@@ -18816,8 +18816,8 @@ N    //EPDDrawContainByIDPos(TRUE,EPD_PICT_LINE_SMALL_2_I_INDEX,130,104+(nowInde
 N    EPDDrawContainByIDPos(FALSE,EPD_PICT_LINE_SMALL_2_I_INDEX,130,104+(nowIndex*STRING_HEIGHT));
 X    EPDDrawContainByIDPos((0),EPD_PICT_LINE_SMALL_2_I_INDEX,130,104+(nowIndex*50));
 N    char versionString[35]; 
-N    sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, getdataCode());
-X    sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",1, 9, 7, getdataCode());
+N    sprintf(versionString,"Ver. %d.%02d.%02d  build:%u",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, getdataCode());
+X    sprintf(versionString,"Ver. %d.%02d.%02d  build:%u",1, 9, 7, getdataCode());
 N    EPDDrawString(TRUE,versionString,100,700);
 X    EPDDrawString((1),versionString,100,700);
 N    //terninalPrintf("========MAIN MENU========[INFO GUI] <GuiOnDraw>  [%d0'ms].\n", xTaskGetTickCount() - tickLocalStart); 

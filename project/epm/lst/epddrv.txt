@@ -9,6 +9,7 @@
                           REQUIRE _printf_flags
                           REQUIRE _printf_widthprec
                           REQUIRE _printf_d
+                          REQUIRE _printf_u
                           REQUIRE _printf_int_dec
                   EPDSetBacklight PROC
 ;;;2002   
@@ -5754,7 +5755,7 @@
 ;;;1981       {
 ;;;1982           char versionString[35]; 
 ;;;1983           //sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, BUILD_VERSION_EPD);  
-;;;1984           sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, dataCode);
+;;;1984           sprintf(versionString,"Ver. %d.%02d.%02d  build:%u",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, dataCode);
 ;;;1985           EPDDrawString(TRUE,versionString,100,700);
 ;;;1986       }
 ;;;1987       
@@ -6054,13 +6055,13 @@
                   |L1.13568|
                           DCD      dataCode
                   |L1.13572|
-003504  5665722e          DCB      "Ver. %d.%02d.%02d  build:%d",0
+003504  5665722e          DCB      "Ver. %d.%02d.%02d  build:%u",0
 003508  2025642e
 00350c  25303264
 003510  2e253032
 003514  64202062
 003518  75696c64
-00351c  3a256400
+00351c  3a257500
                   |L1.13600|
                           DCD      threadBackLightWaitTime
                   |L1.13604|

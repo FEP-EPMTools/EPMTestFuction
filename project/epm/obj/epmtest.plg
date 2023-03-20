@@ -122,64 +122,64 @@ src\user\hwtester.c(5810): warning:  #61-D: integer operation result is out of r
 src\user\hwtester.c(6001): warning:  #111-D: statement is unreachable
 src\user\hwtester.c(5864): warning:  #177-D: variable "ReaderCTSLowSensorSnrSwVD33InFlag" was declared but never referenced
 src\user\hwtester.c(5865): warning:  #177-D: variable "ReaderCTSHighSensorSnrSwVD33InFlag" was declared but never referenced
-src\user\hwtester.c(6542): warning:  #177-D: variable "tString" was declared but never referenced
-src\user\hwtester.c(6876): warning:  #177-D: variable "NumStr" was declared but never referenced
-src\user\hwtester.c(7669): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(7899): warning:  #61-D: integer operation result is out of range
-src\user\hwtester.c(8696): warning:  #177-D: variable "changeFlag" was declared but never referenced
-src\user\hwtester.c(8765): warning:  #177-D: variable "ReadCmd" was declared but never referenced
-src\user\hwtester.c(8773): warning:  #177-D: variable "setFR" was declared but never referenced
-src\user\hwtester.c(8899): warning:  #177-D: variable "ReadCmd" was declared but never referenced
-src\user\hwtester.c(8907): warning:  #177-D: variable "rdIndex" was declared but never referenced
-src\user\hwtester.c(9774): warning:  #177-D: variable "changeFlag" was declared but never referenced
-src\user\hwtester.c(9931): warning:  #546-D: transfer of control bypasses initialization of:
-            variable "retry1" (declared at line 10014)
-            variable "retry2" (declared at line 10088)
+src\user\hwtester.c(6540): warning:  #177-D: variable "tString" was declared but never referenced
+src\user\hwtester.c(6874): warning:  #177-D: variable "NumStr" was declared but never referenced
+src\user\hwtester.c(7667): warning:  #111-D: statement is unreachable
+src\user\hwtester.c(7897): warning:  #61-D: integer operation result is out of range
+src\user\hwtester.c(8694): warning:  #177-D: variable "changeFlag" was declared but never referenced
+src\user\hwtester.c(8763): warning:  #177-D: variable "ReadCmd" was declared but never referenced
+src\user\hwtester.c(8771): warning:  #177-D: variable "setFR" was declared but never referenced
+src\user\hwtester.c(8897): warning:  #177-D: variable "ReadCmd" was declared but never referenced
+src\user\hwtester.c(8905): warning:  #177-D: variable "rdIndex" was declared but never referenced
+src\user\hwtester.c(9772): warning:  #177-D: variable "changeFlag" was declared but never referenced
+src\user\hwtester.c(9929): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "retry1" (declared at line 10012)
+            variable "retry2" (declared at line 10086)
           switch(tempchar)
           ^
-src\user\hwtester.c(10170): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
-src\user\hwtester.c(10173): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
-src\user\hwtester.c(10174): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
-src\user\hwtester.c(10511): warning:  #177-D: variable "FRtype" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "code11" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "code12" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "code13" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "code14" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "code21" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "code22" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "code23" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "code24" was declared but never referenced
-src\user\hwtester.c(10828): warning:  #177-D: variable "pageCounter" was declared but never referenced
-src\user\hwtester.c(10829): warning:  #177-D: variable "pagechangeFlag" was declared but never referenced
-src\user\hwtester.c(10831): warning:  #177-D: variable "tempreadLUTVersion" was declared but never referenced
-src\user\hwtester.c(11101): warning:  #177-D: variable "changeFlag" was declared but never referenced
-src\user\hwtester.c(11451): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(11411): warning:  #177-D: variable "chrtemp" was declared but never referenced
-src\user\hwtester.c(11681): warning:  #940-D: missing return statement at end of non-void function "QueryNTPfun"
-src\user\hwtester.c(12218): warning:  #61-D: integer operation result is out of range
-src\user\hwtester.c(12256): warning:  #177-D: variable "timeOut" was declared but never referenced
-src\user\hwtester.c(12516): warning:  #177-D: variable "VCOMString" was declared but never referenced
-src\user\hwtester.c(12374): warning:  #177-D: variable "lastvcomValue" was declared but never referenced
-src\user\hwtester.c(12375): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
-src\user\hwtester.c(12378): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
-src\user\hwtester.c(12379): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
-src\user\hwtester.c(12380): warning:  #177-D: variable "recoveryVCOMString" was declared but never referenced
-src\user\hwtester.c(12674): warning:  #177-D: variable "lastvcomValue" was declared but never referenced
-src\user\hwtester.c(12675): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
-src\user\hwtester.c(12676): warning:  #177-D: variable "newvcomValue" was declared but never referenced
-src\user\hwtester.c(12677): warning:  #177-D: variable "recoveryvcomValue" was declared but never referenced
-src\user\hwtester.c(12678): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
-src\user\hwtester.c(12679): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
-src\user\hwtester.c(12680): warning:  #177-D: variable "recoveryVCOMString" was declared but never referenced
+src\user\hwtester.c(10168): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
+src\user\hwtester.c(10171): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
+src\user\hwtester.c(10172): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
+src\user\hwtester.c(10509): warning:  #177-D: variable "FRtype" was declared but never referenced
+src\user\hwtester.c(10825): warning:  #177-D: variable "code11" was declared but never referenced
+src\user\hwtester.c(10825): warning:  #177-D: variable "code12" was declared but never referenced
+src\user\hwtester.c(10825): warning:  #177-D: variable "code13" was declared but never referenced
+src\user\hwtester.c(10825): warning:  #177-D: variable "code14" was declared but never referenced
+src\user\hwtester.c(10825): warning:  #177-D: variable "code21" was declared but never referenced
+src\user\hwtester.c(10825): warning:  #177-D: variable "code22" was declared but never referenced
+src\user\hwtester.c(10825): warning:  #177-D: variable "code23" was declared but never referenced
+src\user\hwtester.c(10825): warning:  #177-D: variable "code24" was declared but never referenced
+src\user\hwtester.c(10826): warning:  #177-D: variable "pageCounter" was declared but never referenced
+src\user\hwtester.c(10827): warning:  #177-D: variable "pagechangeFlag" was declared but never referenced
+src\user\hwtester.c(10829): warning:  #177-D: variable "tempreadLUTVersion" was declared but never referenced
+src\user\hwtester.c(11099): warning:  #177-D: variable "changeFlag" was declared but never referenced
+src\user\hwtester.c(11449): warning:  #111-D: statement is unreachable
+src\user\hwtester.c(11409): warning:  #177-D: variable "chrtemp" was declared but never referenced
+src\user\hwtester.c(11679): warning:  #940-D: missing return statement at end of non-void function "QueryNTPfun"
+src\user\hwtester.c(12216): warning:  #61-D: integer operation result is out of range
+src\user\hwtester.c(12254): warning:  #177-D: variable "timeOut" was declared but never referenced
+src\user\hwtester.c(12514): warning:  #177-D: variable "VCOMString" was declared but never referenced
+src\user\hwtester.c(12372): warning:  #177-D: variable "lastvcomValue" was declared but never referenced
+src\user\hwtester.c(12373): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
+src\user\hwtester.c(12376): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
+src\user\hwtester.c(12377): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
+src\user\hwtester.c(12378): warning:  #177-D: variable "recoveryVCOMString" was declared but never referenced
+src\user\hwtester.c(12672): warning:  #177-D: variable "lastvcomValue" was declared but never referenced
+src\user\hwtester.c(12673): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
+src\user\hwtester.c(12674): warning:  #177-D: variable "newvcomValue" was declared but never referenced
+src\user\hwtester.c(12675): warning:  #177-D: variable "recoveryvcomValue" was declared but never referenced
+src\user\hwtester.c(12676): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
+src\user\hwtester.c(12677): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
+src\user\hwtester.c(12678): warning:  #177-D: variable "recoveryVCOMString" was declared but never referenced
 src\user\hwtester.c(157): warning:  #177-D: function "singleTestB" was declared but never referenced
-src\user\hwtester.c(11530): warning:  #177-D: function "ModemTool" was declared but never referenced
-src\user\hwtester.c(11592): warning:  #177-D: function "NTPTool" was declared but never referenced
+src\user\hwtester.c(11528): warning:  #177-D: function "ModemTool" was declared but never referenced
+src\user\hwtester.c(11590): warning:  #177-D: function "NTPTool" was declared but never referenced
 src\user\hwtester.c(2002): warning:  #177-D: function "versionQuery" was declared but never referenced
-src\user\hwtester.c(7703): warning:  #177-D: function "lidarSingleTest" was declared but never referenced
+src\user\hwtester.c(7701): warning:  #177-D: function "lidarSingleTest" was declared but never referenced
 src\user\hwtester.c(4724): warning:  #177-D: function "SuperCapTest" was declared but never referenced
-src\user\hwtester.c(9384): warning:  #177-D: function "radarTest" was declared but never referenced
-src\user\hwtester.c(9702): warning:  #177-D: function "lidarTest" was declared but never referenced
-src\user\hwtester.c(9771): warning:  #177-D: function "lidarPowerSet" was declared but never referenced
+src\user\hwtester.c(9382): warning:  #177-D: function "radarTest" was declared but never referenced
+src\user\hwtester.c(9700): warning:  #177-D: function "lidarTest" was declared but never referenced
+src\user\hwtester.c(9769): warning:  #177-D: function "lidarPowerSet" was declared but never referenced
 src\user\hwtester.c(254): warning:  #177-D: variable "testerResult" was declared but never referenced
 src\user\hwtester.c(255): warning:  #177-D: variable "epdString" was declared but never referenced
 src\user\hwtester.c(256): warning:  #177-D: variable "epdPrintFlag" was declared but never referenced
@@ -612,165 +612,3 @@ FromELF: creating hex file...
 After Build - User command #1: fromelf --bin ".\obj\epmtest.axf" --output ".\obj\epmtest.bin"
 After Build - User command #2: fromelf --text -c ".\obj\epmtest.axf" --output ".\obj\epmtest.txt"
 ".\obj\epmtest.axf" - 0 Errors, 423 Warning(s).
-Build target 'epmtest'
-compiling main.c...
-compiling hwtester.c...
-src\user\hwtester.c(897): warning:  #177-D: variable "tempchar" was declared but never referenced
-src\user\hwtester.c(898): warning:  #177-D: variable "numberString" was declared but never referenced
-src\user\hwtester.c(899): warning:  #177-D: variable "firststringflag" was declared but never referenced
-src\user\hwtester.c(900): warning:  #177-D: variable "changenumberflag" was declared but never referenced
-src\user\hwtester.c(902): warning:  #177-D: variable "str" was declared but never referenced
-src\user\hwtester.c(905): warning:  #177-D: variable "number" was declared but never referenced
-src\user\hwtester.c(951): warning:  #177-D: variable "tempchar" was declared but never referenced
-src\user\hwtester.c(952): warning:  #177-D: variable "numberString" was declared but never referenced
-src\user\hwtester.c(953): warning:  #177-D: variable "firststringflag" was declared but never referenced
-src\user\hwtester.c(954): warning:  #177-D: variable "changenumberflag" was declared but never referenced
-src\user\hwtester.c(956): warning:  #177-D: variable "str" was declared but never referenced
-src\user\hwtester.c(959): warning:  #177-D: variable "number" was declared but never referenced
-src\user\hwtester.c(1043): warning:  #177-D: variable "tempchar" was declared but never referenced
-src\user\hwtester.c(1044): warning:  #177-D: variable "numberString" was declared but never referenced
-src\user\hwtester.c(1045): warning:  #177-D: variable "firststringflag" was declared but never referenced
-src\user\hwtester.c(1046): warning:  #177-D: variable "changenumberflag" was declared but never referenced
-src\user\hwtester.c(1048): warning:  #177-D: variable "str" was declared but never referenced
-src\user\hwtester.c(1051): warning:  #177-D: variable "number" was declared but never referenced
-src\user\hwtester.c(1112): warning:  #177-D: variable "str" was declared but never referenced
-src\user\hwtester.c(1268): warning:  #223-D: function "UserDrvInit" declared implicitly
-src\user\hwtester.c(1205): warning:  #177-D: variable "tempchar" was declared but never referenced
-src\user\hwtester.c(1206): warning:  #177-D: variable "numberString" was declared but never referenced
-src\user\hwtester.c(1207): warning:  #177-D: variable "firststringflag" was declared but never referenced
-src\user\hwtester.c(1208): warning:  #177-D: variable "changenumberflag" was declared but never referenced
-src\user\hwtester.c(1210): warning:  #177-D: variable "binselect" was declared but never referenced
-src\user\hwtester.c(1382): warning:  #223-D: function "UserDrvInit" declared implicitly
-src\user\hwtester.c(1356): warning:  #177-D: variable "tempchar" was declared but never referenced
-src\user\hwtester.c(1357): warning:  #177-D: variable "numberString" was declared but never referenced
-src\user\hwtester.c(1358): warning:  #177-D: variable "firststringflag" was declared but never referenced
-src\user\hwtester.c(1359): warning:  #177-D: variable "changenumberflag" was declared but never referenced
-src\user\hwtester.c(1361): warning:  #177-D: variable "binselect" was declared but never referenced
-src\user\hwtester.c(1475): warning:  #177-D: variable "tempchar" was declared but never referenced
-src\user\hwtester.c(1476): warning:  #177-D: variable "numberString" was declared but never referenced
-src\user\hwtester.c(1477): warning:  #177-D: variable "firststringflag" was declared but never referenced
-src\user\hwtester.c(1478): warning:  #177-D: variable "changenumberflag" was declared but never referenced
-src\user\hwtester.c(1480): warning:  #177-D: variable "binselect" was declared but never referenced
-src\user\hwtester.c(1831): warning:  #223-D: function "UserDrvInit" declared implicitly
-src\user\hwtester.c(1867): warning:  #940-D: missing return statement at end of non-void function "OpenCamPhoto"
-src\user\hwtester.c(1886): warning:  #177-D: variable "count" was declared but never referenced
-src\user\hwtester.c(1887): warning:  #177-D: variable "remain" was declared but never referenced
-src\user\hwtester.c(1888): warning:  #177-D: variable "progress" was declared but never referenced
-src\user\hwtester.c(1890): warning:  #177-D: variable "timeStr" was declared but never referenced
-src\user\hwtester.c(2733): warning:  #177-D: variable "LEDresultFlag3" was declared but never referenced
-src\user\hwtester.c(2741): warning:  #177-D: variable "LEDVerStr" was declared but never referenced
-src\user\hwtester.c(2913): warning:  #177-D: variable "count" was declared but never referenced
-src\user\hwtester.c(2987): warning:  #177-D: variable "lastStatus" was declared but never referenced
-src\user\hwtester.c(2988): warning:  #177-D: variable "statusStage" was declared but never referenced
-src\user\hwtester.c(3199): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(3316): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(3423): warning:  #177-D: variable "EPDtestFlag" was declared but never referenced
-src\user\hwtester.c(3794): warning:  #61-D: integer operation result is out of range
-src\user\hwtester.c(3560): warning:  #177-D: variable "resultFlag1" was declared but never referenced
-src\user\hwtester.c(3561): warning:  #177-D: variable "resultFlag2" was declared but never referenced
-src\user\hwtester.c(3562): warning:  #177-D: variable "resultFlag3" was declared but never referenced
-src\user\hwtester.c(3563): warning:  #550-D: variable "resultFlag4" was set but never used
-src\user\hwtester.c(3568): warning:  #177-D: variable "ReadBufLen" was declared but never referenced
-src\user\hwtester.c(4044): warning:  #177-D: variable "waitcounter" was declared but never referenced
-src\user\hwtester.c(4045): warning:  #177-D: variable "mwaitcounter" was declared but never referenced
-src\user\hwtester.c(4272): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(4321): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(4372): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(4404): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(4438): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(4475): warning:  #177-D: variable "mtimeoutCounter2" was declared but never referenced
-src\user\hwtester.c(4476): warning:  #177-D: variable "timeoutCounter2" was declared but never referenced
-src\user\hwtester.c(4866): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(4873): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(4878): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(4884): warning:  #940-D: missing return statement at end of non-void function "SetValue"
-src\user\hwtester.c(4889): warning:  #177-D: variable "idTmpYear" was declared but never referenced
-src\user\hwtester.c(4889): warning:  #177-D: variable "idTmpMonth" was declared but never referenced
-src\user\hwtester.c(4889): warning:  #177-D: variable "idTmpDay" was declared but never referenced
-src\user\hwtester.c(4889): warning:  #177-D: variable "idTmpHour" was declared but never referenced
-src\user\hwtester.c(4889): warning:  #177-D: variable "idTmpMinute" was declared but never referenced
-src\user\hwtester.c(4889): warning:  #177-D: variable "idTmpSecond" was declared but never referenced
-src\user\hwtester.c(4889): warning:  #177-D: variable "idTmpWeekday" was declared but never referenced
-src\user\hwtester.c(5076): warning:  #61-D: integer operation result is out of range
-src\user\hwtester.c(5018): warning:  #177-D: variable "pt" was declared but never referenced
-src\user\hwtester.c(5777): warning:  #61-D: integer operation result is out of range
-src\user\hwtester.c(5810): warning:  #61-D: integer operation result is out of range
-src\user\hwtester.c(6001): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(5864): warning:  #177-D: variable "ReaderCTSLowSensorSnrSwVD33InFlag" was declared but never referenced
-src\user\hwtester.c(5865): warning:  #177-D: variable "ReaderCTSHighSensorSnrSwVD33InFlag" was declared but never referenced
-src\user\hwtester.c(6540): warning:  #177-D: variable "tString" was declared but never referenced
-src\user\hwtester.c(6874): warning:  #177-D: variable "NumStr" was declared but never referenced
-src\user\hwtester.c(7667): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(7897): warning:  #61-D: integer operation result is out of range
-src\user\hwtester.c(8694): warning:  #177-D: variable "changeFlag" was declared but never referenced
-src\user\hwtester.c(8763): warning:  #177-D: variable "ReadCmd" was declared but never referenced
-src\user\hwtester.c(8771): warning:  #177-D: variable "setFR" was declared but never referenced
-src\user\hwtester.c(8897): warning:  #177-D: variable "ReadCmd" was declared but never referenced
-src\user\hwtester.c(8905): warning:  #177-D: variable "rdIndex" was declared but never referenced
-src\user\hwtester.c(9772): warning:  #177-D: variable "changeFlag" was declared but never referenced
-src\user\hwtester.c(9929): warning:  #546-D: transfer of control bypasses initialization of:
-            variable "retry1" (declared at line 10012)
-            variable "retry2" (declared at line 10086)
-          switch(tempchar)
-          ^
-src\user\hwtester.c(10168): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
-src\user\hwtester.c(10171): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
-src\user\hwtester.c(10172): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
-src\user\hwtester.c(10509): warning:  #177-D: variable "FRtype" was declared but never referenced
-src\user\hwtester.c(10825): warning:  #177-D: variable "code11" was declared but never referenced
-src\user\hwtester.c(10825): warning:  #177-D: variable "code12" was declared but never referenced
-src\user\hwtester.c(10825): warning:  #177-D: variable "code13" was declared but never referenced
-src\user\hwtester.c(10825): warning:  #177-D: variable "code14" was declared but never referenced
-src\user\hwtester.c(10825): warning:  #177-D: variable "code21" was declared but never referenced
-src\user\hwtester.c(10825): warning:  #177-D: variable "code22" was declared but never referenced
-src\user\hwtester.c(10825): warning:  #177-D: variable "code23" was declared but never referenced
-src\user\hwtester.c(10825): warning:  #177-D: variable "code24" was declared but never referenced
-src\user\hwtester.c(10826): warning:  #177-D: variable "pageCounter" was declared but never referenced
-src\user\hwtester.c(10827): warning:  #177-D: variable "pagechangeFlag" was declared but never referenced
-src\user\hwtester.c(10829): warning:  #177-D: variable "tempreadLUTVersion" was declared but never referenced
-src\user\hwtester.c(11099): warning:  #177-D: variable "changeFlag" was declared but never referenced
-src\user\hwtester.c(11449): warning:  #111-D: statement is unreachable
-src\user\hwtester.c(11409): warning:  #177-D: variable "chrtemp" was declared but never referenced
-src\user\hwtester.c(11679): warning:  #940-D: missing return statement at end of non-void function "QueryNTPfun"
-src\user\hwtester.c(12216): warning:  #61-D: integer operation result is out of range
-src\user\hwtester.c(12254): warning:  #177-D: variable "timeOut" was declared but never referenced
-src\user\hwtester.c(12514): warning:  #177-D: variable "VCOMString" was declared but never referenced
-src\user\hwtester.c(12372): warning:  #177-D: variable "lastvcomValue" was declared but never referenced
-src\user\hwtester.c(12373): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
-src\user\hwtester.c(12376): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
-src\user\hwtester.c(12377): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
-src\user\hwtester.c(12378): warning:  #177-D: variable "recoveryVCOMString" was declared but never referenced
-src\user\hwtester.c(12672): warning:  #177-D: variable "lastvcomValue" was declared but never referenced
-src\user\hwtester.c(12673): warning:  #177-D: variable "modifyvcomValue" was declared but never referenced
-src\user\hwtester.c(12674): warning:  #177-D: variable "newvcomValue" was declared but never referenced
-src\user\hwtester.c(12675): warning:  #177-D: variable "recoveryvcomValue" was declared but never referenced
-src\user\hwtester.c(12676): warning:  #177-D: variable "lastVCOMString" was declared but never referenced
-src\user\hwtester.c(12677): warning:  #177-D: variable "modifyVCOMString" was declared but never referenced
-src\user\hwtester.c(12678): warning:  #177-D: variable "recoveryVCOMString" was declared but never referenced
-src\user\hwtester.c(157): warning:  #177-D: function "singleTestB" was declared but never referenced
-src\user\hwtester.c(11528): warning:  #177-D: function "ModemTool" was declared but never referenced
-src\user\hwtester.c(11590): warning:  #177-D: function "NTPTool" was declared but never referenced
-src\user\hwtester.c(2002): warning:  #177-D: function "versionQuery" was declared but never referenced
-src\user\hwtester.c(7701): warning:  #177-D: function "lidarSingleTest" was declared but never referenced
-src\user\hwtester.c(4724): warning:  #177-D: function "SuperCapTest" was declared but never referenced
-src\user\hwtester.c(9382): warning:  #177-D: function "radarTest" was declared but never referenced
-src\user\hwtester.c(9700): warning:  #177-D: function "lidarTest" was declared but never referenced
-src\user\hwtester.c(9769): warning:  #177-D: function "lidarPowerSet" was declared but never referenced
-src\user\hwtester.c(254): warning:  #177-D: variable "testerResult" was declared but never referenced
-src\user\hwtester.c(255): warning:  #177-D: variable "epdString" was declared but never referenced
-src\user\hwtester.c(256): warning:  #177-D: variable "epdPrintFlag" was declared but never referenced
-src\user\hwtester.c(257): warning:  #177-D: variable "refreshMsgBar" was declared but never referenced
-src\user\hwtester.c(265): warning:  #177-D: variable "bayColorOff" was declared but never referenced
-src\user\hwtester.c(266): warning:  #177-D: variable "bayColorAllGreen" was declared but never referenced
-src\user\hwtester.c(267): warning:  #177-D: variable "bayColorAllRed" was declared but never referenced
-src\user\hwtester.c(284): warning:  #177-D: variable "firstInitFlag" was declared but never referenced
-src\user\hwtester.c(314): warning:  #177-D: variable "SleeptestFlag" was declared but never referenced
-src\user\hwtester.c(813): warning:  #177-D: function "guiManagerRefreshScreen" was declared but never referenced
-src\user\hwtester.c(3106): warning:  #177-D: function "redSwitchAllTest_old" was declared but never referenced
-src\user\hwtester.c(4783): warning:  #177-D: function "readerCNCallback" was declared but never referenced
-linking...
-Program Size: Code=674152 RO-data=27384 RW-data=11728 ZI-data=29793180  
-FromELF: creating hex file...
-After Build - User command #1: fromelf --bin ".\obj\epmtest.axf" --output ".\obj\epmtest.bin"
-After Build - User command #2: fromelf --text -c ".\obj\epmtest.axf" --output ".\obj\epmtest.txt"
-".\obj\epmtest.axf" - 0 Errors, 149 Warning(s).

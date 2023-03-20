@@ -1981,7 +1981,7 @@ BOOL EpdDrvInit(BOOL testModeFlag)
     {
         char versionString[35]; 
         //sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, BUILD_VERSION_EPD);  
-        sprintf(versionString,"Ver. %d.%02d.%02d  build:%d",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, dataCode);
+        sprintf(versionString,"Ver. %d.%02d.%02d  build:%u",MAJOR_VERSION, MINOR_VERSION, REVISION_VERSION, dataCode);
         EPDDrawString(TRUE,versionString,100,700);
     }
     
